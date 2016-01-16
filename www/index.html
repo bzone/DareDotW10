@@ -11,9 +11,10 @@
     <script src="lib/angular/angular.js"></script>
     <script src="lib/onsen/js/onsenui.js"></script>
     <!-- CSS dependencies -->
-    <link rel="stylesheet" href="css/index.css" />
+
     <link rel="stylesheet" href="lib/onsen/css/onsenui.css" />
     <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css" />
+    <link rel="stylesheet" href="css/index.css" />
     <!-- CSP support mode (required for Windows Universal apps) -->
     <link rel="stylesheet" href="lib/angular/angular-csp.css" />
     <!-- --------------- App init --------------- -->
@@ -27,71 +28,23 @@
     <script src="js/jquery.js"></script>
     <script src="js/jquery.easypiechart.js"></script>
     <script src="scripts/index.js"></script>
-    <!-- -->
-    <style>
-        .item {
-            padding: 0px;
-            line-height: 1;
-        }
-        
-        .item-thum {
-            background-color: #ccc;
-            width: 50px;
-            height: 50px;
-            border-radius: 4px;
-        }
-        
-        .item-title {
-            font-size: 15px;
-            font-weight: 500;
-        }
-        
-        .item-desc {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.3;
-            margin: 4px 0 0 0;
-            padding: 0 30px 0 0;
-        }
-        
-        .item-label {
-            font-size: 12px;
-            color: #999;
-            float: right;
-        }
-    </style>
+
     <div class="spinner" id="spinner" style="display:none;">
         <div id="spinnerOk" style="display:none;"><i class="ion-checkmark-round"></i></div>
         <div id="spinnerIcon"></div>
     </div>
-    <div class="over" id="timer" style="display:none;">
-        <div class="timerHolder">
-            <div class="stopTimer"><i class="icon ion-close-circled"></i></div>
-            <div class="clockAnimation"></div>
-            <div class="clockAnimationBg"></div>
-            <div id="clockTaskName"></div>
-            <div id="clockdiv"></div>
-        </div>
-    </div>
 
-    <div class="commentForm" id="commentForm" style="display:none;">
-        <div class="inputHolder">
-            <input type="text" id="newComment"></input>
-            <div class="acceptButton" ng-click="addCommentGlobal()">OK</div>
-        </div>
-
-    </div>
 
     <ons-navigator var="navi">
-        <ons-page style="background:#31198B !Important;" ng-init="checkLogin()">
-            <div class="bigLogo"></div>
+        <ons-page style="background-color:#E60E2A !Important;" class="loginBg">
             <form class="loginStyle">
+                <div class="bigLogo"></div>
                 <input type="email" id="loginEmail" class="loginInputStyle" placeholder="e-mail" />
                 <input type="password" id="loginPassword" class="loginInputStyle" placeholder="hasło" />
-                <a class="submitButton" ng-click="loginUser()">Zaloguj się</a>
+                <a class="submitButton" ng-click="loginUser()">zaloguj się</a>
                 <br/>
                 <span class="lub">lub</span>
-                <a class="submitButton" onclick="navi.pushPage('register.html', { animation : 'slide' } )">Utwórz nowe konto</a>
+                <a class="submitButton alternative" onclick="navi.pushPage('register.html', { animation : 'slide' } )">utwórz nowe konto</a>
                 <br/>
                 <a class="passwordReset" onclick="navi.pushPage('recovery.html', { animation : 'slide' } )">zapomniałeś hasła?</a>
             </form>
@@ -101,7 +54,7 @@
 
     <ons-template id="register.html">
 
-        <ons-page style="background:#31198B !Important;">
+        <ons-page class="loginBg">
             <ons-toolbar>
                 <div class="left">
                     <ons-toolbar-button onclick="navi.popPage();">
@@ -109,10 +62,9 @@
                     </ons-toolbar-button>
                 </div>
             </ons-toolbar>
-            <div class="bigLogo logoMargin"></div>
             <form class="loginStyle">
-                <input type="text" id="newUserName" class="loginInputStyle" placeholder="imię" />
-                <input type="text" id="newUserSurName" class="loginInputStyle" placeholder="nazwisko" />
+                <div class="bigLogo logoMargin"></div>
+                <input type="text" id="newUserName" class="loginInputStyle" placeholder="nazwa użytkownika" />
                 <input type="email" id="newUserEmail" class="loginInputStyle" placeholder="e-mail" />
                 <input type="password" id="newUserPassword" class="loginInputStyle" placeholder="hasło" />
                 <a class="submitButton" ng-click="registerUser()">Utwórz konto i zaloguj</a>
@@ -123,7 +75,7 @@
 
 
     <ons-template id="recovery.html">
-        <ons-page style="background:#31198B !Important;">
+        <ons-page class="loginBg">
             <ons-toolbar>
                 <div class="left">
                     <ons-toolbar-button onclick="navi.popPage();">
@@ -131,36 +83,17 @@
                     </ons-toolbar-button>
                 </div>
             </ons-toolbar>
-            <div class="bigLogo logoMargin"></div>
             <form class="loginStyle">
-                <p class="recover">Podaj adres e-mail powiązany z Twoim kontem.
+                <div class="bigLogo logoMargin"></div>
+
+                <p class="recover">Podaj nazwę uzytkownika i adres e-mail powiązany z Twoim kontem.
                     <br/>Na podany adres otrzymasz przypomnienia swojego hasła.</p>
                 <br/>
+                <input type="text" id="recoverUser" class="loginInputStyle" placeholder="twoja nazwa użytkownika" />
                 <input type="email" id="recoverEmail" class="loginInputStyle" placeholder="twój e-mail" />
                 <a class="submitButton" ng-click="recoverPassword()">zresetuj hasło</a>
                 <br/>
             </form>
-        </ons-page>
-    </ons-template>
-
-
-    <ons-template id="nfcShare.html">
-        <ons-page style="background:#31198B !Important;">
-            <ons-toolbar>
-                <div class="left">
-                    <ons-toolbar-button ng-click="stopNFC()">
-                        <ons-icon icon="ion-chevron-left" fixed-width="false" style="font-size: 26px; vertical-align: -4px"></ons-icon>
-                    </ons-toolbar-button>
-                </div>
-            </ons-toolbar>
-            <div>
-              <form class="loginStyle">
-              <h2 class="nfcHeader">Przypisz użytkownika/ów do tego zadania wykorzystując NFC</h2>
-               <img src="css/NFC.png" class="nfcImage"/>
-                <a class="submitButton" id="shareNFC">rozpocznij udospępnianie</a>
-                </form>
-            </div>
-
         </ons-page>
     </ons-template>
 
@@ -185,7 +118,7 @@
                     <ons-toolbar-button onclick="projectCreated++;navi.pushPage('newproject.html', { animation : 'slide' } );">
                         <ons-icon icon="ion-plus-round" fixed-width="false" style="font-size: 26px; vertical-align: -4px"></ons-icon>
                     </ons-toolbar-button>
-                    
+
                 </div>
             </ons-toolbar>
             <ons-carousel swipeable overscrollable auto-scroll auto-refresh fullscreen var="carousel" ng-controller="MasterController" class="tabDashboard" style="overflow:hidden; height:0px;">
@@ -1596,7 +1529,7 @@
 
 
             function shareNFC() {
-               
+
             }
 
 
@@ -2096,26 +2029,26 @@
                     $('#capturePhoto').click(function () {
                         captureImage();
                     });
-                    
-                    var share=0;
 
-                   $('#shareNFC2').click(function () {
-                        if(share==0) {
-                        share=1;
-                        shareNFC();
+                    var share = 0;
+
+                    $('#shareNFC2').click(function () {
+                        if (share == 0) {
+                            share = 1;
+                            shareNFC();
                             $(this).text('zakończ udostępnianie');
                         } else {
-                            share=0;
+                            share = 0;
                             $(this).text('rozpocznij udostępnianie');
                         }
-                        
-                       
-                    }); 
-                    
-                    
-                    var lisen=0;
-                    $('#lisenNFC').click(function() {
-                        lisen=1;
+
+
+                    });
+
+
+                    var lisen = 0;
+                    $('#lisenNFC').click(function () {
+                        lisen = 1;
                         lisenNFC();
                         alert('slucham');
                     })
