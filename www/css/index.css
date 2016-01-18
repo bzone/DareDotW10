@@ -16,74 +16,101 @@
  * specific language governing permissions and limitations
  * under the License.
  */
- 
+
+@viewport {
+    width: 450px;
+}
+
+@-ms-viewport {
+    width: 450px;
+    zoom-user: fixed;
+    max-zoom: 1;
+    min-zoom: 1;
+}
 
 * {
-    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+    zoom: 1;
+    -ms-content-zooming: none;
 }
 
-@-webkit-keyframes rotating /* Safari and Chrome */ {
-  from {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  to {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+body,
+html {
+    -ms-overflow-style: none !important;
 }
+
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+@-webkit-keyframes rotating
+/* Safari and Chrome */
+
+{
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
 @keyframes rotating {
-  from {
-    -ms-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  to {
-    -ms-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
-
-
 
 body {
-    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
-    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
-    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
- 
-    font-family:sans-serif;
-    font-size:12px;
-    height:100%;
-    margin:0px;
-    padding:0px;
-    width:100%;
-  -ms-content-zooming: none; 
-    background-color:#E60E2A;
+    -webkit-touch-callout: none;
+    /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;
+    /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;
+    /* prevent copy paste, to allow, change 'none' to 'text' */
+    font-family: Arial, sans-serif !important;
+    font-size: 12px;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    -ms-content-zooming: none;
+    background-color: #E60E2A;
 }
 
 .page__content {
- background-color:#E60E2A !important;
+    background-color: #E60E2A !important;
 }
 
+
 /*NOTE Spiner */
+
 #spinnerIcon {
     -webkit-animation: rotating 2s linear infinite;
-  -moz-animation: rotating 2s linear infinite;
-  -ms-animation: rotating 2s linear infinite;
-  -o-animation: rotating 2s linear infinite;
-  animation: rotating 2s linear infinite;
-   background:url(spinner.png);
+    -moz-animation: rotating 2s linear infinite;
+    -ms-animation: rotating 2s linear infinite;
+    -o-animation: rotating 2s linear infinite;
+    animation: rotating 2s linear infinite;
+    background: url(spinner.png);
     background-size: 32px 32px;
     width: 100px;
     height: 100px;
@@ -94,25 +121,25 @@ body {
 #spinnerOk {
     width: 100px;
     height: 100px;
-    color:#FFF;
+    color: #FFF;
     text-align: center;
     line-height: 100px;
     font-size: 30px;
-       -webkit-animation: zoomIn 1s linear 1;
-  -moz-animation: zoomIn 1s linear 1;
-  -ms-animation: zoomIn 1s linear 1;
-  -o-animation: zoomIn 1s linear 1;
-  animation: zoomIn 1s linear 1;
+    -webkit-animation: zoomIn 1s linear 1;
+    -moz-animation: zoomIn 1s linear 1;
+    -ms-animation: zoomIn 1s linear 1;
+    -o-animation: zoomIn 1s linear 1;
+    animation: zoomIn 1s linear 1;
 }
 
 #spinner {
     width: 100px;
     height: 100px;
     position: fixed;
-    border-radius:20px;
+    border-radius: 20px;
     background-color: rgba(0, 0, 0, 0.9);
     left: 50%;
-    top:50%;
+    top: 50%;
     margin-left: -50px;
     margin-top: -50px;
     text-align: center;
@@ -132,27 +159,28 @@ input {
     width: 100%;
     padding: 10px;
     background-color: #FFF;
-    color:#000;
+    color: #000;
     border-radius: 23px;
     text-align: center;
     box-sizing: border-box;
-    border:0;
+    border: 0;
     height: 46px;
-    font-size:16px;
+    font-size: 16px;
     margin-bottom: 10px;
+    font-family: Arial, sans-serif !important;
 }
 
 .submitButton {
     width: 100%;
     padding: 10px;
     background-color: #000;
-    color:#FFF;
+    color: #FFF;
     border-radius: 23px;
     text-align: center;
     box-sizing: border-box;
-    border:0;
+    border: 0;
     height: 46px;
-    font-size:16px;
+    font-size: 16px;
     margin-bottom: 0px;
     display: block;
     line-height: 26px;
@@ -162,8 +190,9 @@ input {
     background-color: #af1b2d;
 }
 
-.lub, .passwordReset {
-    color:#FFF;
+.lub,
+.passwordReset {
+    color: #FFF;
     display: block;
     text-align: center;
     margin-bottom: 20px;
@@ -182,7 +211,7 @@ input {
 
 .loginBg .page__content {
     background-image: url(homebg.png) !important;
-    background-size:cover;
+    background-size: cover;
     background-position: bottom center;
 }
 
@@ -192,4 +221,219 @@ p.recover {
 
 .logoMargin {
     margin-top: -25px;
+}
+
+
+/* Home/dash */
+
+.page--menu-page__background {
+    background-color: #231F20;
+    color: white;
+}
+
+.menu-close,
+.menu-close > .toolbar-button {
+    color: #999;
+}
+
+.menu-list,
+.menu-item:first-child,
+.menu-item {
+    background-color: transparent;
+    background-image: none !important;
+    border-color: transparent;
+    color: #fff;
+}
+
+.menu-item {
+    padding: 0 0 0 20px;
+    line-height: 52px;
+    height: 52px;
+    text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;
+}
+
+.menu-item:active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-notification {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 14px;
+    height: 16px;
+    line-height: 16px;
+    min-width: 16px;
+    font-weight: 600;
+}
+
+.bottom-menu-list,
+.bottom-menu-item:first-child,
+.bottom-menu-item {
+    border-color: #000000;
+    background-color: transparent;
+    background-image: none !important;
+    color: #FFF;
+}
+
+.bottom-menu-item:active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+ons-page.ng-scope.page.page--menu-page,
+ons-page.ng-scope.page.page--menu-page .page__content {
+    background-color: #231F20 !important;
+}
+
+a.submitButton.logOut {
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 20px;
+    background-color: #E60E2A;
+    position: absolute;
+    bottom: 25px;
+}
+
+.menuIcon {
+    float: left;
+    width: 34px;
+    height: 34px;
+    background-color: #E60E2A;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-top: 5px;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.dashboard {
+    padding: 20px;
+}
+
+.avatar {
+    width: 164px;
+    height: 164px;
+    margin: auto;
+    border-radius: 50%;
+    border: solid 2px #CFF;
+    box-shadow: inset 0px 0px 0px 7px #E60E2A, inset 0px 0px 0px 14px rgba(0, 0, 0, 0.4);
+    background-size: cover;
+    background-position: center center;
+    margin-bottom: 20px;
+}
+
+.userEmail {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.box13 {
+    box-sizing: border-box;
+    float: left;
+    width: 33.33%;
+    text-align: center;
+}
+
+span.white {
+    color: #FFF;
+    display: block;
+    font-weight: bold;
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.lastChallenge {
+    background-color: #FFF;
+    border-radius: 10px;
+    clear: both;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.top {
+    padding: 15px;
+}
+
+.labelBlack {
+    background-color: #000;
+    float: left;
+    color: #FFF;
+    padding: 3px 9px;
+    text-transform: uppercase;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+.clear {
+    clear: both;
+}
+
+.bottom {
+    border-top: solid 1px #CCC;
+}
+
+.bottom .box13 {
+    padding: 10px;
+    color: #828282;
+    /* line-height: 42px; */
+}
+
+span.title {
+    font-size: 20px;
+    margin-top: 10px;
+    display: block;
+}
+
+.doneChart {
+    width: 36px;
+    height: 36px;
+    border: solid 3px #E60E2A;
+    border-radius: 50%;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    float: left;
+    margin-right: 10px;
+}
+
+.locationIcon,
+.playersIcon {
+    width: 36px;
+    height: 36px;
+    border: solid 3px #E60E2A;
+    background-color: #E60E2A;
+    border-radius: 50%;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    float: left;
+    margin-right: 10px;
+}
+
+.doneChart .bar {
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    background-color: #E60E2A;
+}
+
+.userName {
+    color: #FFF;
+    text-align: center;
+    font-weight: bold;
+    font-size: 33px;
+}
+
+.boxText.ng-binding {
+    display: inline-block;
+    line-height: 42px;
+    float: right;
+}
+
+.box13.borderRight {
+    border-right: solid 1px #CCC;
 }
