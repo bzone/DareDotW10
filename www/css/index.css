@@ -437,3 +437,82 @@ span.title {
 .box13.borderRight {
     border-right: solid 1px #CCC;
 }
+
+.contenHolder {
+    width: 90%;
+    margin: auto;
+    box-sizing: border-box;
+    margin-bottom: 25px;
+    margin-top: 25px;
+}
+
+.whiteFrame {
+    background-color: #FFF;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size:
+}
+
+.whiteFrame .list {
+    font-size: 15px !important;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    line-height: normal;
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 17px;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    text-align: left;
+    overflow: auto;
+    display: block;
+    -webkit-overflow-scrolling: touch;
+    padding: 0;
+    background-color: #fff;
+    border-top: 0px solid #000;
+    border-bottom: 0px solid #000;
+    background-color: #fff;
+}
+
+.whiteFrame .list__item {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    list-style: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    padding: 0 10px 0 10px;
+    margin: 0 0 0 0;
+    border-top: none;
+    border-bottom: 1px solid #CCC;
+    color: #000;
+    background-color: transparent;
+    min-height: 44px;
+    line-height: 44px;
+}
+
+.whiteFrame .list__item:last-child {
+    border: none;
+}
+
+.whiteFrame .list input {
+    text-align: right;
+    height: 40px;
+}

@@ -5,10 +5,7 @@
     var currentApiKey;
 
 
-    module.controller('AppController', function ($scope, $projekty, $currentUser, $bazauzytkownikow, $filter) {
-        $scope.user = $currentUser.items[0];
-
-
+    module.controller('AppController', function ($scope, $projekty, $filter) {
         //NOTE: Logowanie uzytkownika
         $scope.loginUser = function () {
             var user_email = $("#loginEmail").val();
@@ -146,19 +143,67 @@
                 });
             }
         }
+
+        //NOTE: Otwieranie ekranu ustawień
+        $scope.openSettings = function () {
+            menu.closeMenu();
+            naviDash.pushPage('settings.html');
+        }
+
+
+        $scope.changeAvatar = function () {
+            function convertToDataURLviaCanvas(url, callback, outputFormat) {
+                var img = new Image();
+                img.crossOrigin = 'Anonymous';
+                img.onload = function () {
+                    var canvas = document.createElement('CANVAS');
+                    var ctx = canvas.getContext('2d');
+                    var dataURL;
+                    canvas.height = this.height * 0.2;
+                    canvas.width = this.width * 0.2;
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate(90 * Math.PI / 180);
+                    ctx.translate(-canvas.width / 2, -canvas.height / 2);
+                    ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+                    dataURL = canvas.toDataURL(outputFormat);
+                    callback(dataURL);
+                    canvas = null;
+                };
+                img.src = url;
+            }
+
+            function getLengthInBytes(str) {
+                var b = str.match(/[^\x00-\xff]/g);
+                return (str.length + (!b ? 0 : b.length));
+            }
+
+            function captureSuccess(mediaFiles) {
+                var i, len;
+                for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+                    var avatrUzytkownika = mediaFiles[i].fullPath;
+                    convertToDataURLviaCanvas(avatrUzytkownika, function (base64Img) {
+                        avatrUzytkownika = base64Img;
+                        alert('ok');
+                        $('#avatarPreview').css('background-image', 'url(' + base64Img + ')');
+                        $scope.user.new_avatar = base64Img;
+                        $scope.user.new_avatar_size = getLengthInBytes(base64Img);
+                        alert($scope.user.new_avatar_size);
+                    });
+                }
+            }
+
+            navigator.device.capture.captureImage(captureSuccess, console.log("capture"), {
+                limit: 1
+            });
+        }
+
+
+
     });
 
-    module.controller('MasterController', function ($scope, $projekty, $currentUser, $filter) {
+    module.controller('MasterController', function ($scope, $projekty, $filter) {
         $scope.items = $projekty.items;
-        $scope.user = $currentUser.items[0];
         var userID = $scope.user.idUser;
-    });
-
-
-    module.factory('$currentUser', function () {
-        var currentUser = {};
-        currentUser.items = [];
-        return currentUser;
     });
 
 
@@ -169,10 +214,5 @@
         return projekty;
     });
 
-    module.factory('$bazauzytkownikow', function () {
-        var bazauzytkownikow = {};
-        bazauzytkownikow.items = [];
-        return bazauzytkownikow;
-    });
 
 })();
