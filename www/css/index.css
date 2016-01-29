@@ -170,6 +170,14 @@ input {
     font-family: Arial, sans-serif !important;
 }
 
+input::-webkit-input-placeholder {
+    color: #CCC;
+}
+
+input:-ms-input-placeholder {
+    color: #CCC;
+}
+
 .submitButton {
     width: 100%;
     padding: 10px;
@@ -306,8 +314,28 @@ a.submitButton.logOut {
     background-repeat: no-repeat;
 }
 
+.menuIcon.home {
+    background-image: url(home_menu_icon.png);
+}
+
+.menuIcon.yourQuests {
+    background-image: url(chellenges_menu_icon.png);
+}
+
+.menuIcon.newQuest {
+    background-image: url(add_new_menu_icon.png);
+}
+
+.menuIcon.stats {
+    background-image: url(stats_menu_icon.png);
+}
+
+.menuIcon.settings {
+    background-image: url(settings_menu_icon.png);
+}
+
 .dashboard {
-    padding: 20px;
+    padding: 5%;
 }
 
 .avatar {
@@ -406,11 +434,21 @@ span.title {
     border: solid 3px #E60E2A;
     background-color: #E60E2A;
     border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
     position: relative;
     display: inline-block;
     overflow: hidden;
     float: left;
     margin-right: 10px;
+}
+
+.playersIcon {
+    background-image: url(players.png);
+}
+
+.locationIcon {
+    background-image: url(leaderboard_icon.png);
 }
 
 .doneChart .bar {
@@ -515,4 +553,66 @@ span.title {
 .whiteFrame .list input {
     text-align: right;
     height: 40px;
+}
+
+
+/* Statystykie */
+
+.badge {
+    text-align: center;
+}
+
+.badge img {
+    width: 68px;
+    height: 68px;
+    display: inline-block;
+}
+
+.contentPaddings {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.noContentPaddings {
+    padding: 0px !important;
+}
+
+.marginB {
+    margin-bottom: 20px;
+}
+
+ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-navicon {
+    width: 28px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('menu-icon.png');
+}
+
+ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-navicon:before {
+    content: "";
+}
+
+.task .title {
+    margin-top: 0px;
+}
+
+.task .top {
+    position: relative;
+}
+
+.task .top .arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    background-size: 15px 24px;
+    background-repeat: no-repeat;
+    margin-top: -12px;
+    width: 15px;
+    height: 24px;
+    display: block;
+    background-image: url(arrow.png);
+}
+
+.red {
+    color: #E5162F;
 }

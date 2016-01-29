@@ -144,13 +144,39 @@
             }
         }
 
-        //NOTE: Otwieranie ekranu ustawień
-        $scope.openSettings = function () {
-            menu.closeMenu();
-            naviDash.pushPage('settings.html');
+        //NOTE: Wylogowywanie
+        $scope.logOut = function () {
+            $.ajax({
+                type: "POST",
+                url: url + '/api/v1/security/logout',
+                beforeSend: function () {
+                    $("#spinner").css('display', 'block');
+                },
+                headers: {
+                    "api-key": currentApiKey
+                },
+                datatype: 'json',
+                cache: false,
+                success: function (respond) {
+                    $("#spinner").fadeOut(1000);
+                    menu.closeMenu();
+                    navi.popPage();
+                },
+                error: function (respond) {
+                    window.console && console.log('error ' + JSON.stringify(respond));
+                    $("#spinner").fadeOut(1000);
+                }
+            });
         }
 
 
+        //NOTE: Otwieranie ekranu ustawień
+        $scope.openSettings = function () {
+            menu.closeMenu();
+            naviDash.replacePage('settings.html');
+        }
+
+        //NOTE: Zmiana avatara
         $scope.changeAvatar = function () {
             function convertToDataURLviaCanvas(url, callback, outputFormat) {
                 var img = new Image();
@@ -159,8 +185,8 @@
                     var canvas = document.createElement('CANVAS');
                     var ctx = canvas.getContext('2d');
                     var dataURL;
-                    canvas.height = this.height * 0.2;
-                    canvas.width = this.width * 0.2;
+                    canvas.height = this.height * 0.1;
+                    canvas.width = this.width * 0.1;
                     ctx.translate(canvas.width / 2, canvas.height / 2);
                     ctx.rotate(90 * Math.PI / 180);
                     ctx.translate(-canvas.width / 2, -canvas.height / 2);
@@ -183,11 +209,12 @@
                     var avatrUzytkownika = mediaFiles[i].fullPath;
                     convertToDataURLviaCanvas(avatrUzytkownika, function (base64Img) {
                         avatrUzytkownika = base64Img;
-                        alert('ok');
+                        window.console && console.log('Nowy awatar pobrany');
                         $('#avatarPreview').css('background-image', 'url(' + base64Img + ')');
-                        $scope.user.new_avatar = base64Img;
-                        $scope.user.new_avatar_size = getLengthInBytes(base64Img);
-                        alert($scope.user.new_avatar_size);
+                        $scope.user.new_avatar = base64Img.split(',')[1];
+                        $scope.user.new_avatar_size = getLengthInBytes($scope.user.new_avatar);
+                        window.console && console.log($scope.user.new_avatar_size);
+                        console.log($scope.user.new_avatar);
                     });
                 }
             }
@@ -195,6 +222,206 @@
             navigator.device.capture.captureImage(captureSuccess, console.log("capture"), {
                 limit: 1
             });
+        }
+
+
+        //NOTE: Zapisywanie zmian w profilu użytkownika
+        $scope.saveSettings = function () {
+            var passwordOK = false;
+            var sendData = false;
+            if ($scope.user.newpassword || $scope.user.newpasswordr) {
+                if ($scope.user.newpassword == $scope.user.newpasswordr) {
+                    window.console && console.log('Nowe hasło gotowe do ustawienia');
+                    passwordOK = true;
+                } else {
+                    ons.notification.alert({
+                        message: 'Hasła się nie zgadzają'
+                    });
+                }
+            }
+            if ($scope.user.new_avatar) {
+                window.console && console.log('Nowy awatar gotowy do ustawienia');
+                var newAvatar = {
+                    'sizeInBytes': $scope.user.new_avatar_size,
+                    'mimeType': 'image/png',
+                    'name': 'avatar',
+                    'data': $scope.user.new_avatar
+                }
+            }
+            if (passwordOK && $scope.user.newpassword && $scope.user.newpasswordr && $scope.user.new_avatar) {
+                sendData = true;
+                var dataToSend = {
+                    first_name: $scope.user.first_name,
+                    last_name: $scope.user.last_name,
+                    username: $scope.user.username,
+                    email: $scope.user.email,
+                    facebook_id: $scope.user.facebook_id,
+                    twitter_id: $scope.user.twitter_id,
+                    password: $scope.user.newpassword,
+                    image: JSON.stringify({
+                        'sizeInBytes': $scope.user.new_avatar_size,
+                        'mimeType': 'image/png',
+                        'name': 'avatar',
+                        'data': $scope.user.new_avatar
+                    })
+                }
+            } else if (passwordOK && $scope.user.newpassword && $scope.user.newpasswordr && !$scope.user.new_avatar) {
+                sendData = true;
+                var dataToSend = {
+                    first_name: $scope.user.first_name,
+                    last_name: $scope.user.last_name,
+                    username: $scope.user.username,
+                    email: $scope.user.email,
+                    facebook_id: $scope.user.facebook_id,
+                    twitter_id: $scope.user.twitter_id,
+                    password: $scope.user.newpassword
+                }
+            } else if (!$scope.user.newpassword && !$scope.user.newpasswordr && $scope.user.new_avatar) {
+                sendData = true;
+                var dataToSend = {
+                    first_name: $scope.user.first_name,
+                    last_name: $scope.user.last_name,
+                    username: $scope.user.username,
+                    email: $scope.user.email,
+                    facebook_id: $scope.user.facebook_id,
+                    twitter_id: $scope.user.twitter_id,
+                    image: JSON.stringify({
+                        'sizeInBytes': $scope.user.new_avatar_size,
+                        'mimeType': 'image/png',
+                        'name': 'avatar',
+                        'data': $scope.user.new_avatar
+                    })
+                }
+            } else if (!$scope.user.newpassword && !$scope.user.newpasswordr) {
+                sendData = true;
+                var dataToSend = {
+                    first_name: $scope.user.first_name,
+                    last_name: $scope.user.last_name,
+                    username: $scope.user.username,
+                    email: $scope.user.email,
+                    facebook_id: $scope.user.facebook_id,
+                    twitter_id: $scope.user.twitter_id
+                }
+            }
+
+            if (sendData) {
+                $.ajax({
+                    type: "POST",
+                    url: url + '/api/v1/user/update-profile',
+                    beforeSend: function () {
+                        $("#spinner").css('display', 'block');
+                    },
+                    data: dataToSend,
+                    headers: {
+                        "api-key": currentApiKey
+                    },
+                    datatype: 'json',
+                    cache: false,
+                    success: function (respond) {
+                        console.log(respond);
+                        if (respond.status == "success") {
+                            window.console && console.log('Zaktualizowano dane użytkownika');
+                            $("#spinner").fadeOut(1000);
+                            ons.notification.alert({
+                                message: 'Twoje dane zostały zaktualizowane'
+                            });
+                        } else if (respond.status == "error") {
+                            window.console && console.log('error ' + respond.data);
+                            $("#spinner").fadeOut(1000);
+                            ons.notification.alert({
+                                message: 'Podane dane są niepoprawne'
+                            });
+                        }
+                    },
+                    error: function (respond) {
+                        window.console && console.log('error ' + JSON.stringify(respond));
+                        $("#spinner").fadeOut(1000);
+                        ons.notification.alert({
+                            message: 'Podane dane są niepoprawne'
+                        });
+                    }
+                });
+            }
+        }
+
+        //NOTE: Otwieranie ekranu statystyk
+        $scope.openStats = function () {
+            menu.closeMenu();
+            naviDash.replacePage('stats.html');
+        }
+
+        //NOTE: Otwieranie twoich zadan {
+        $scope.openYourQuests = function () {
+            menu.closeMenu();
+            $.ajax({
+                type: "GET",
+                url: url + '/api/v1/user/challenges',
+                beforeSend: function () {
+                    $("#spinner").css('display', 'block');
+                },
+                data: {
+                    finished: 0,
+                    limit: 1000,
+                },
+                headers: {
+                    "api-key": currentApiKey
+                },
+                datatype: 'json',
+                cache: false,
+                success: function (respond) {
+                    $scope.activeTasks = angular.fromJson(respond.data);
+                    console.log(respond);
+                    $.ajax({
+                        type: "GET",
+                        url: url + '/api/v1/user/challenges',
+                        beforeSend: function () {
+                            $("#spinner").css('display', 'block');
+                        },
+                        data: {
+                            finished: 1,
+                            limit: 1000,
+                        },
+                        headers: {
+                            "api-key": currentApiKey
+                        },
+                        datatype: 'json',
+                        cache: false,
+                        success: function (respond) {
+                            $scope.doneTasks = angular.fromJson(respond.data);
+                            $("#spinner").fadeOut(1000);
+                            console.log(respond);
+                            naviDash.pushPage('yourquests.html');
+                        },
+                        error: function (respond) {
+                            window.console && console.log('error ' + JSON.stringify(respond));
+                            $("#spinner").fadeOut(1000);
+                            ons.notification.alert({
+                                message: 'Podane dane są niepoprawne'
+                            });
+                        }
+                    });
+                },
+                error: function (respond) {
+                    window.console && console.log('error ' + JSON.stringify(respond));
+                    $("#spinner").fadeOut(1000);
+                    ons.notification.alert({
+                        message: 'Podane dane są niepoprawne'
+                    });
+                }
+            });
+
+        }
+
+        //NOTE: Otwieranie zakładki zadania aktywne {
+        $scope.showActiveTasks = function () {
+            $('#activeTasks').css('display', 'block');
+            $('#doneTasks').css('display', 'none');
+        }
+
+        //NOTE: Otwieranie zakładki zadania ukończone {
+        $scope.showDoneTasks = function () {
+            $('#activeTasks').css('display', 'none');
+            $('#doneTasks').css('display', 'block');
         }
 
 
