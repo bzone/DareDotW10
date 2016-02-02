@@ -600,7 +600,7 @@ ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-navicon:before {
     position: relative;
 }
 
-.task .top .arrow {
+.arrow {
     position: absolute;
     right: 15px;
     top: 50%;
@@ -615,4 +615,63 @@ ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-navicon:before {
 
 .red {
     color: #E5162F;
+}
+
+.emptyState {
+    padding-top: 100px;
+    color: #FFF;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.emptyCircle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: solid 8px #FFF;
+    margin: auto;
+}
+
+
+/* detale zestawu */
+
+.versus {
+    text-align: center;
+    color: #FFF;
+    position: relative;
+}
+
+.box12 {
+    width: 50%;
+    float: left;
+}
+
+.circleHolder {
+    width: 108px;
+    height: 108px;
+    margin: auto;
+    border-radius: 50%;
+    border: solid 2px #CFF;
+    box-shadow: inset 0px 0px 0px 4px #E60E2A, inset 0px 0px 0px 8px rgba(0, 0, 0, 0.4);
+    background-size: cover;
+    background-position: center center;
+    margin-bottom: 10px;
+    background-color: #FFF;
+    line-height: 108px;
+    color: #000;
+    font-size: 27px;
+}
+
+.vs {
+    position: absolute;
+    top: 44px;
+    width: 100%;
+    display: block;
+    left: 0px;
+}
+
+.circleHolder.black {
+    color: #FFF;
+    background-color: #231F20;
 }

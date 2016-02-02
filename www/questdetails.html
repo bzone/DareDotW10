@@ -1,0 +1,64 @@
+<ons-page>
+    <ons-toolbar>
+        <div class="left">
+            <ons-toolbar-button ng-click="naviDash.popPage()">
+                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+        <div class="center">daredot</div>
+        <div class="right">
+        </div>
+    </ons-toolbar>
+    <div class="contenHolder">
+        <div ng-if="userIn()">uzytkownik przypisany</div>
+        <div ng-if="questDetailsData.multiplayer==1">gra multiplayer</div>
+        <h3>{{questDetailsData.name}}</h3>
+        <p>{{questDetailsData.description}}</p>
+    </div>
+    <div class="contenHolder versus">
+        <div class="vs">vs</div>
+        <div class="box12">
+            <div class="circleHolder">
+                {{questDetailsData.teams_stats.white}}
+            </div>
+            <div class="clear"></div>
+            biali
+        </div>
+        <div class="box12">
+            <div class="circleHolder black">
+                {{questDetailsData.teams_stats.black}}
+            </div>
+            <div class="clear"></div>
+            czarni
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="contenHolder whiteFrame noContentPaddings" id="activeTasks">
+        <div class="task" ng-repeat="task in tasksInCategory">
+            <div class="top">
+                <div class="arrow"></div>
+                <div class="clear"></div>
+                <span class="title">{{task.name}}</span><span class="red">koniec: {{task.finish_date | date:'dd.MM.yyyy HH:mm'}}</span>
+            </div>
+            <div class="bottom">
+                <div class="box13 borderRight">
+                    <div class="doneChart">
+                        <div class="bar" style="height:{{task.stats.number_of_done_tasks/task.tasks.length*100}}%"></div>
+                    </div>
+                    <div class="boxText">{{task.tasks.length}}</div>
+                </div>
+                <div class="box13 borderRight">
+                    <div class="playersIcon"></div>
+                    <div class="boxText">0{{task.stats.number_of_users}}</div>
+                </div>
+                <div class="box13">
+                    <div class="boxText" ng-if="task.multiplayer==1">Gra
+                        <br/>drużynowa</div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+</ons-page>
