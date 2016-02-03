@@ -2,7 +2,7 @@
     <ons-toolbar>
         <div class="left">
             <ons-toolbar-button ng-click="naviDash.popPage()">
-                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
             </ons-toolbar-button>
         </div>
         <div class="center">daredot</div>
@@ -14,6 +14,23 @@
         <div ng-if="questDetailsData.multiplayer==1">gra multiplayer</div>
         <h3>{{questDetailsData.name}}</h3>
         <p class="des">{{questDetailsData.description}}</p>
+    </div>
+    <div class="contenHolder" ng-if="userIn() && questDetailsData.multiplayer==0">
+        <div class="box13">
+            <div class="doneChart">
+                <div class="bar" style="height:{{detailsMyPoints/questDetailsData.tasks.length*100}}%"></div>
+            </div>
+            <div class="boxText">{{detailsMyPoints}}/{{questDetailsData.tasks.length}}</div>
+        </div>
+        <div class="box13">
+            <div class="playersIcon"></div>
+            <div class="boxText">0{{questDetailsData.number_of_users}}</div>
+        </div>
+        <div class="box13">
+            <div class="locationIcon"></div>
+            <div class="boxText">#0{{detailsMyLocation}}</div>
+        </div>
+        <div class="clear"></div>
     </div>
     <!-- NOTE: Pokaż wyniki drużyn - moduł -->
     <div class="contenHolder versus" ng-if="userIn() && questDetailsData.multiplayer==1">
@@ -42,7 +59,8 @@
     <div class="contenHolder" ng-if="userIn() && questDetailsData.multiplayer==0">
         <a class="submitButton" ng-click="playersRanking(questDetailsData.id)">pokaż ranking graczy</a>
     </div>
-    <div class="contenHolder whiteFrame noContentPaddings" ng-if="userIn() && questDetailsData.multiplayer==1">
+    <!-- NOTE: Pokaż liste zadan multiplayer/przydzielone/aktywne -->
+    <div class="contenHolder whiteFrame noContentPaddings" ng-if="userIn() && questDetailsData.multiplayer==1 && questActive()">
         <div class="task" ng-repeat="task in questDetailsData.teams_stats.tasks" ng-click="taskDetails(task.id)">
             <div class="multiplayerTask">
                 <div class="whiteTeamPoints" ng-if="task.white==0">{{task.difficulty}}</div>
@@ -53,6 +71,63 @@
             </div>
         </div>
     </div>
-
+    <!-- NOTE: Pokaż liste zadan multiplayer/przydzielone/aktywne -->
+    <div class="contenHolder whiteFrame noContentPaddings" ng-if="userIn() && questDetailsData.multiplayer==1 && !questActive()">
+        <div class="task" ng-repeat="task in questDetailsData.teams_stats.tasks">
+            <div class="multiplayerTask">
+                <div class="whiteTeamPoints" ng-if="task.white==0">{{task.difficulty}}</div>
+                <div class="whiteTeamPoints active" ng-if="task.white!=0">{{task.difficulty}}</div>
+                <div class="blackTeamPoints" ng-if="task.black==0">{{task.difficulty}}</div>
+                <div class="blackTeamPoints active" ng-if="task.black!=0">{{task.difficulty}}</div>
+                <span class="title">{{task.name}}</span>
+            </div>
+        </div>
+    </div>
+    <!-- NOTE: Pokaż liste zadan multiplayer/nieprzydzielone/aktywne -->
+    <div class="contenHolder whiteFrame noContentPaddings" ng-if="!userIn() && questDetailsData.multiplayer==1&& questActive()">
+        <div class="task" ng-repeat="task in questDetailsData.teams_stats.tasks">
+            <div class="multiplayerTask">
+                <div class="type type{{task.type}}"></div>
+                <span class="title">{{task.name}}</span>
+            </div>
+        </div>
+    </div>
+    <!-- NOTE: Pokaż liste zadan multiplayer/nieprzydzielone/aktywne -->
+    <div class="contenHolder whiteFrame noContentPaddings" ng-if="!userIn() && questDetailsData.multiplayer==0&& questActive()">
+        <div class="task" ng-repeat="task in questDetailsData.tasks">
+            <div class="multiplayerTask">
+                <div class="type type{{task.type.id}}"></div>
+                <span class="title">{{task.name}}</span>
+            </div>
+        </div>
+    </div>
+    <!-- NOTE: Pokaż liste zadan single/przydzielone/aktywne -->
+    <div class="contenHolder whiteFrame noContentPaddings" ng-if="userIn() && questDetailsData.multiplayer==0 && questActive()">
+        <div class="task" ng-repeat="task in questDetailsData.tasks" ng-click="taskDetails(task.id)">
+            <div class="multiplayerTask">
+                <div class="arrow"></div>
+                <div class="whiteTeamPoints" ng-if="task.verified==0">{{task.difficulty}}</div>
+                <div class="whiteTeamPoints active" ng-if="task.verified!=0">{{task.difficulty}}</div>
+                <span class="title">{{task.name}}</span>
+            </div>
+        </div>
+    </div>
+    <!-- NOTE: Pokaż liste zadan single/przydzielone/nieaktywne -->
+    <div class="contenHolder whiteFrame noContentPaddings" ng-if="userIn() && questDetailsData.multiplayer==0 && !questActive()">
+        <div class="task" ng-repeat="task in questDetailsData.tasks">
+            <div class="multiplayerTask">
+                <div class="whiteTeamPoints" ng-if="task.verified==0">{{task.difficulty}}</div>
+                <div class="whiteTeamPoints active" ng-if="task.verified!=0">{{task.difficulty}}</div>
+                <span class="title">{{task.name}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="contenHolder  noContentPaddings" ng-if="!userIn() && questDetailsData.multiplayer==0 && questActive()">
+        <a class="submitButton" ng-click="joinQuest(questDetailsData.id,'none')">dołącz do zestawu zadań</a>
+    </div>
+    <div class="contenHolder  noContentPaddings" ng-if="!userIn() && questDetailsData.multiplayer==1 && questActive()">
+        <a class="submitButton white" ng-click="joinQuest(questDetailsData.id,'white')">dołącz do białej drużyny</a>
+        <a class="submitButton" ng-click="joinQuest(questDetailsData.id,'black')">dołącz do czarnej drużyny</a>
+    </div>
     <div class="clear"></div>
 </ons-page>

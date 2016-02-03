@@ -26,7 +26,7 @@
                     datatype: 'json',
                     cache: false,
                     success: function (respond) {
-                        console.log(respond);
+                        window.console && console.log(respond);
                         if (respond.status == "success") {
                             currentApiKey = respond.data.api_key;
                             $scope.user = angular.fromJson(respond.data);
@@ -68,7 +68,7 @@
                     datatype: 'json',
                     cache: false,
                     success: function (respond) {
-                        console.log(respond);
+                        window.console && console.log(respond);
                         if (respond.status == "success") {
                             $("#spinner").fadeOut(1000);
                             ons.notification.alert({
@@ -126,7 +126,7 @@
                     datatype: 'json',
                     cache: false,
                     success: function (respond) {
-                        console.log(respond);
+                        window.console && console.log(respond);
                         if (respond.status == "exists") {
                             ons.notification.alert({
                                 message: 'Hey! Już masz konto! możesz się zalogować'
@@ -323,7 +323,7 @@
                     datatype: 'json',
                     cache: false,
                     success: function (respond) {
-                        console.log(respond);
+                        window.console && console.log(respond);
                         if (respond.status == "success") {
                             window.console && console.log('Zaktualizowano dane użytkownika');
                             $("#spinner").fadeOut(1000);
@@ -394,7 +394,7 @@
                 datatype: 'json',
                 cache: false,
                 success: function (respond) {
-                    console.log(respond);
+                    window.console && console.log(respond);
                     if (respond.status == "success") {
                         window.console && console.log('Pobrano zadania z kategorii ' + cat);
                         $scope.tasksInCategory = angular.fromJson(respond.data);
@@ -434,7 +434,7 @@
                 datatype: 'json',
                 cache: false,
                 success: function (respond) {
-                    console.log(respond);
+                    window.console && console.log(respond);
                     if (respond.status == "success") {
                         window.console && console.log('Pobrano detale zestawu ' + id);
                         $scope.questDetailsData = angular.fromJson(respond.data);
@@ -448,6 +448,35 @@
                                 task.difficulty = $scope.questDetailsData.tasks[key].difficulty;
                             }, true);
                         }
+
+                        $scope.detailsMyPoints = 0;
+                        $scope.detailsWhiteTeam = 0;
+                        $scope.detailsBlackTeam = 0;
+
+                        angular.forEach($scope.questDetailsData.tasks, function (task, key) {
+                            if (task.verified != 0) {
+                                $scope.detailsMyPoints++;
+                            }
+                        }, true);
+
+                        angular.forEach($scope.questDetailsData.users, function (user, key) {
+                            if (user.team == "white") {
+                                $scope.detailsWhiteTeam++;
+                            }
+                            if (user.team == "black") {
+                                $scope.detailsBlackTeam++;
+                            }
+                        }, true);
+
+
+                        $scope.detailsMyLocation = 0;
+                        var found = $filter('filter')($scope.questDetailsData.users, {
+                            id: $scope.user.id
+                        }, true);
+                        if (found.length > 0) {
+                            $scope.detailsMyLocation = found[0].location;
+                        }
+
 
                         naviDash.pushPage('questdetails.html');
                         $("#spinner").fadeOut(1000);
@@ -470,15 +499,21 @@
             });
         }
 
-        //NOTE: Sprawdzanie czy użytkownik jest przypisany do zestawu 
+        //NOTE: Otwieranie listy graczy
         $scope.playersList = function (id) {
+            $scope.currentPage = "PlayerList";
             naviDash.pushPage('playerslist.html');
+        }
+
+        //NOTE: Otwieranie rankingu graczy
+        $scope.playersRanking = function (id) {
+            $scope.currentPage = "RankingList";
+            naviDash.pushPage('playerranking.html');
         }
 
         //NOTE: Sprawdzanie czy użytkownik jest przypisany do zestawu 
         $scope.userIn = function () {
             var currentUser = $scope.user.id;
-
             var found = $filter('filter')($scope.questDetailsData.users, {
                 id: currentUser
             }, true);
@@ -487,6 +522,69 @@
             } else {
                 return false;
             }
+        }
+
+        //NOTE: Sprawdzanie czy zadanie jest aktywne
+        $scope.questActive = function () {
+            var dataZadania = $scope.questDetailsData.finish_date;
+            dataZadania = new Date(dataZadania);
+            var now = new Date();
+            if (now.getTime() >= dataZadania.getTime()) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        //NOTE: Dołącz do zadania
+        $scope.joinQuest = function (quest, team) {
+            if (team == "none") {
+                var dataToSend = {
+                    challenge_id: quest,
+                    user_ids: '[' + $scope.user.id + ']'
+                }
+            } else {
+                var dataToSend = {
+                    challenge_id: quest,
+                    user_ids: '[' + $scope.user.id + ']',
+                    team: team
+                }
+            }
+            $.ajax({
+                type: "POST",
+                url: url + '/api/v1/challenge/assign-users',
+                beforeSend: function () {
+                    $("#spinner").css('display', 'block');
+                },
+                headers: {
+                    "api-key": currentApiKey
+                },
+                data: dataToSend,
+                datatype: 'json',
+                cache: false,
+                success: function (respond) {
+                    window.console && console.log(respond);
+                    if (respond.status == "success") {
+                        window.console && console.log('Przypisano do zestawu');
+                        $scope.openYourQuests();
+                        $("#spinner").fadeOut(1000);
+
+                    } else if (respond.status == "error") {
+                        window.console && console.log('error ' + respond.data);
+                        $("#spinner").fadeOut(1000);
+                        ons.notification.alert({
+                            message: 'Bład pobierania danych'
+                        });
+                    }
+                },
+                error: function (respond) {
+                    window.console && console.log('error ' + JSON.stringify(respond));
+                    $("#spinner").fadeOut(1000);
+                    ons.notification.alert({
+                        message: 'Podane dane są niepoprawne'
+                    });
+                }
+            });
         }
 
         //NOTE: Otwieranie twoich zadan 
@@ -512,7 +610,7 @@
                     cache: false,
                     success: function (respond) {
                         $scope.activeTasks = angular.fromJson(respond.data);
-                        console.log(respond);
+                        window.console && console.log(respond);
                         $.ajax({
                             type: "GET",
                             url: url + '/api/v1/user/challenges',
@@ -531,7 +629,7 @@
                             success: function (respond) {
                                 $scope.doneTasks = angular.fromJson(respond.data);
                                 $("#spinner").fadeOut(1000);
-                                console.log(respond);
+                                window.console && console.log(respond);
                                 naviDash.pushPage('yourquests.html');
                             },
                             error: function (respond) {
@@ -552,7 +650,91 @@
                     }
                 });
             }
+        }
 
+
+        //NOTE: Otwieranie porównanie graczy
+        $scope.comparePlayers = function (challenge_id, user_id) {
+            var found = $filter('filter')($scope.questDetailsData.users, {
+                id: user_id
+            }, true);
+            window.console && console.log(found[0]);
+            $scope.compereWith = found[0];
+            $scope.currentPage = 'Compare';
+            $.ajax({
+                type: "GET",
+                url: url + '/api/v1/user/challenges/compare',
+                beforeSend: function () {
+                    $("#spinner").css('display', 'block');
+                },
+                data: {
+                    challenge_id: challenge_id,
+                    user_id: user_id,
+                },
+                headers: {
+                    "api-key": currentApiKey
+                },
+                datatype: 'json',
+                cache: false,
+                success: function (respond) {
+                    $("#spinner").fadeOut(1000);
+                    $scope.compare = angular.fromJson(respond.message);
+                    window.console && console.log(respond);
+
+                    $.ajax({
+                        type: "GET",
+                        url: url + '/api/v1/user/challenges/compare',
+                        beforeSend: function () {
+                            $("#spinner").css('display', 'block');
+                        },
+                        data: {
+                            challenge_id: challenge_id,
+                            user_id: $scope.user.id,
+                        },
+                        headers: {
+                            "api-key": currentApiKey
+                        },
+                        datatype: 'json',
+                        cache: false,
+                        success: function (respond) {
+                            $("#spinner").fadeOut(1000);
+                            $scope.compareMyPoints = angular.fromJson(respond.message);
+                            window.console && console.log(respond);
+
+                            var myPoints = 0;
+                            var otherPoints = 0;
+                            angular.forEach($scope.compare, function (task, key) {
+                                task.verifiedMy = $scope.compareMyPoints[key].verified;
+                                if (task.verifiedMy != 0) {
+                                    myPoints++;
+                                }
+                                if (task.verified != 0) {
+                                    otherPoints++;
+                                }
+                            }, true);
+                            $scope.myPoints = myPoints;
+                            $scope.otherPoints = otherPoints;
+
+                            naviDash.pushPage('compare.html');
+                        },
+                        error: function (respond) {
+                            window.console && console.log('error ' + JSON.stringify(respond));
+                            $("#spinner").fadeOut(1000);
+                            ons.notification.alert({
+                                message: 'Podane dane są niepoprawne'
+                            });
+                        }
+                    });
+
+                },
+                error: function (respond) {
+                    window.console && console.log('error ' + JSON.stringify(respond));
+                    $("#spinner").fadeOut(1000);
+                    ons.notification.alert({
+                        message: 'Podane dane są niepoprawne'
+                    });
+                }
+            });
         }
 
         //NOTE: Otwieranie zakładki zadania aktywne {

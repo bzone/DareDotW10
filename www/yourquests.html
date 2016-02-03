@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="contenHolder whiteFrame noContentPaddings" id="activeTasks">
-        <div class="task" ng-repeat="task in activeTasks">
+        <div class="task" ng-repeat="task in activeTasks" ng-click="questDetails(task.id)">
             <div class="top">
                 <div class="arrow"></div>
                 <div class="clear"></div>
@@ -52,7 +52,7 @@
     </div>
 
     <div class="contenHolder whiteFrame noContentPaddings" id="doneTasks" style="display:none;">
-        <div class="task" ng-repeat="task in doneTasks">
+        <div class="task" ng-repeat="task in doneTasks" ng-click="questDetails(task.id)">
             <div class="top">
                 <div class="arrow"></div>
                 <div class="clear"></div>
