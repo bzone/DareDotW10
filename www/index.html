@@ -130,8 +130,9 @@
                     <div class="box13"><span class="white">{{user.total_badges}}</span>zdobyte
                         <br/>odznaki</div>
                     <div class="clear"></div>
-                    <div class="lastChallenge">
+                    <div class="lastChallenge" ng-click="questDetails(user.last_challenge.id)">
                         <div class="top">
+                           <div class="arrow"></div>
                             <div class="labelBlack">Ostatnie wyzwanie</div>
                             <div class="clear"></div>
                             <span class="title">{{user.last_challenge.name}}</span>

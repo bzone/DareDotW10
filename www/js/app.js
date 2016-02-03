@@ -438,6 +438,17 @@
                     if (respond.status == "success") {
                         window.console && console.log('Pobrano detale zestawu ' + id);
                         $scope.questDetailsData = angular.fromJson(respond.data);
+
+                        if ($scope.questDetailsData.teams_stats) {
+                            angular.forEach($scope.questDetailsData.teams_stats.tasks, function (task, key) {
+                                window.console && console.log(task.name + " : " + key);
+                                window.console && console.log($scope.questDetailsData.tasks[key].name);
+                                task.id = $scope.questDetailsData.tasks[key].id;
+                                task.type = $scope.questDetailsData.tasks[key].type.id;
+                                task.difficulty = $scope.questDetailsData.tasks[key].difficulty;
+                            }, true);
+                        }
+
                         naviDash.pushPage('questdetails.html');
                         $("#spinner").fadeOut(1000);
 
@@ -457,6 +468,11 @@
                     });
                 }
             });
+        }
+
+        //NOTE: Sprawdzanie czy użytkownik jest przypisany do zestawu 
+        $scope.playersList = function (id) {
+            naviDash.pushPage('playerslist.html');
         }
 
         //NOTE: Sprawdzanie czy użytkownik jest przypisany do zestawu 

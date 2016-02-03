@@ -17,6 +17,10 @@
  * under the License.
  */
 
+@-o-viewport {
+    width: 450px;
+}
+
 @viewport {
     width: 450px;
 }
@@ -44,21 +48,17 @@ html {
 }
 
 @-webkit-keyframes rotating
-/* Safari and Chrome */
 
+/* Safari and Chrome */
 {
     from {
         -ms-transform: rotate(0deg);
-        -moz-transform: rotate(0deg);
         -webkit-transform: rotate(0deg);
-        -o-transform: rotate(0deg);
         transform: rotate(0deg);
     }
     to {
         -ms-transform: rotate(360deg);
-        -moz-transform: rotate(360deg);
         -webkit-transform: rotate(360deg);
-        -o-transform: rotate(360deg);
         transform: rotate(360deg);
     }
 }
@@ -66,16 +66,12 @@ html {
 @keyframes rotating {
     from {
         -ms-transform: rotate(0deg);
-        -moz-transform: rotate(0deg);
         -webkit-transform: rotate(0deg);
-        -o-transform: rotate(0deg);
         transform: rotate(0deg);
     }
     to {
         -ms-transform: rotate(360deg);
-        -moz-transform: rotate(360deg);
         -webkit-transform: rotate(360deg);
-        -o-transform: rotate(360deg);
         transform: rotate(360deg);
     }
 }
@@ -83,10 +79,13 @@ html {
 body {
     -webkit-touch-callout: none;
     /* prevent callout to copy image, etc when tap to hold */
+    
     -webkit-text-size-adjust: none;
     /* prevent webkit from resizing text to fit */
+    
     -webkit-user-select: none;
     /* prevent copy paste, to allow, change 'none' to 'text' */
+    
     font-family: Arial, sans-serif !important;
     font-size: 12px;
     height: 100%;
@@ -100,15 +99,10 @@ body {
 .page__content {
     background-color: #E60E2A !important;
 }
-
-
 /*NOTE Spiner */
 
 #spinnerIcon {
     -webkit-animation: rotating 2s linear infinite;
-    -moz-animation: rotating 2s linear infinite;
-    -ms-animation: rotating 2s linear infinite;
-    -o-animation: rotating 2s linear infinite;
     animation: rotating 2s linear infinite;
     background: url(spinner.png);
     background-size: 32px 32px;
@@ -126,9 +120,6 @@ body {
     line-height: 100px;
     font-size: 30px;
     -webkit-animation: zoomIn 1s linear 1;
-    -moz-animation: zoomIn 1s linear 1;
-    -ms-animation: zoomIn 1s linear 1;
-    -o-animation: zoomIn 1s linear 1;
     animation: zoomIn 1s linear 1;
 }
 
@@ -146,8 +137,6 @@ body {
     line-height: 100px;
     z-index: 9999;
 }
-
-
 /*NOTE: Login Pages */
 
 form.loginStyle {
@@ -230,8 +219,6 @@ p.recover {
 .logoMargin {
     margin-top: -25px;
 }
-
-
 /* Home/dash */
 
 .page--menu-page__background {
@@ -383,6 +370,7 @@ span.white {
 
 .top {
     padding: 15px;
+    position: relative;
 }
 
 .labelBlack {
@@ -532,8 +520,6 @@ span.title {
     padding: 0;
     position: relative;
     list-style: none;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: block;
     padding: 0 10px 0 10px;
@@ -544,6 +530,7 @@ span.title {
     background-color: transparent;
     min-height: 44px;
     line-height: 44px;
+    background-image: none;
 }
 
 .whiteFrame .list__item:last-child {
@@ -554,8 +541,6 @@ span.title {
     text-align: right;
     height: 40px;
 }
-
-
 /* Statystykie */
 
 .badge {
@@ -632,8 +617,6 @@ ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-navicon:before {
     border: solid 8px #FFF;
     margin: auto;
 }
-
-
 /* detale zestawu */
 
 .versus {
@@ -674,4 +657,67 @@ ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-navicon:before {
 .circleHolder.black {
     color: #FFF;
     background-color: #231F20;
+}
+
+.multiplayerTask {
+    position: relative;
+}
+
+.whiteTeamPoints {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: solid 2px #E60E2A;
+    background-color: #FFF;
+    text-align: center;
+    line-height: 32px;
+    color: #9B9B9B;
+    top: 19px;
+    left: 25px;
+}
+
+.blackTeamPoints {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: solid 2px #E60E2A;
+    background-color: #FFF;
+    text-align: center;
+    line-height: 32px;
+    color: #9B9B9B;
+    top: 19px;
+    right: 25px;
+}
+
+.whiteTeamPoints.active,
+.blackTeamPoints.active {
+    background-color: #231F20;
+    color: #FFFFFF;
+    box-shadow: inset 0px 0px 0px 3px #E60E2A;
+}
+
+.multiplayerTask .title {
+    width: 100%;
+    padding-left: 80px;
+    padding-right: 80px;
+    text-align: center;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    box-sizing: border-box;
+    border-bottom: solid 1px #CCC;
+}
+
+h3 {
+    color: #FFF;
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+p.des {
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 30px;
 }
