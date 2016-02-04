@@ -9,26 +9,67 @@
         <div class="right">
         </div>
     </ons-toolbar>
-    <div class="contenHolder">
-        <div ng-if="userIn()">uzytkownik przypisany</div>
-        <div ng-if="questDetailsData.multiplayer==1">gra multiplayer</div>
+    <div class="contenHolder" ng-init="updateLocation()">
         <h3>{{questDetailsData.name}}</h3>
         <p class="des">{{questDetailsData.description}}</p>
     </div>
+    <!-- NOTE: Pokaż ikony drużyn - moduł -->
     <div class="contenHolder" ng-if="userIn() && questDetailsData.multiplayer==0">
-        <div class="box13">
-            <div class="doneChart">
-                <div class="bar" style="height:{{detailsMyPoints/questDetailsData.tasks.length*100}}%"></div>
+        <div class="box13 whiteText textLeft">
+            <div class="displayInlineBlock">
+                <div class="doneChart white">
+                    <div class="bar" style="height:{{detailsMyPoints/questDetailsData.tasks.length*100}}%"></div>
+                </div>
+                <div class="boxText">{{detailsMyPoints}}/{{questDetailsData.tasks.length}}</div>
             </div>
-            <div class="boxText">{{detailsMyPoints}}/{{questDetailsData.tasks.length}}</div>
         </div>
-        <div class="box13">
-            <div class="playersIcon"></div>
-            <div class="boxText">0{{questDetailsData.number_of_users}}</div>
+        <div class="box13 whiteText textCenter">
+            <div class="displayInlineBlock">
+                <div class="playersIcon white"></div>
+                <div class="boxText">0{{questDetailsData.users.length}}</div>
+            </div>
         </div>
-        <div class="box13">
-            <div class="locationIcon"></div>
-            <div class="boxText">#0{{detailsMyLocation}}</div>
+        <div class="box13 whiteText textRight">
+            <div class="displayInlineBlock">
+                <div class="locationIcon white"></div>
+                <div class="boxText">#0{{detailsMyLocation}}</div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="contenHolder" ng-if="!userIn() && questDetailsData.multiplayer==0">
+        <div class="box13 whiteText textLeft margin16p">
+            <div class="displayInlineBlock">
+                <div class="pointsIcon white"></div>
+                <div class="boxText">0{{questDetailsData.tasks.length}}</div>
+            </div>
+        </div>
+        <div class="box13 whiteText textRight">
+            <div class="displayInlineBlock">
+                <div class="playersIcon white"></div>
+                <div class="boxText">0{{questDetailsData.users.length}}</div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="contenHolder" ng-if="!userIn() && questDetailsData.multiplayer==1">
+        <div class="box13 whiteText textLeft">
+            <div class="displayInlineBlock">
+                <div class="pointsIcon white"></div>
+                <div class="boxText">0{{questDetailsData.tasks.length}}</div>
+            </div>
+        </div>
+        <div class="box13 whiteText textCenter">
+            <div class="displayInlineBlock">
+                <div class="playersIcon white"></div>
+                <div class="boxText">0{{detailsWhiteTeam}}</div>
+            </div>
+        </div>
+        <div class="box13 whiteText textRight">
+            <div class="displayInlineBlock">
+                <div class="playersIcon black"></div>
+                <div class="boxText">0{{detailsBlackTeam}}</div>
+            </div>
         </div>
         <div class="clear"></div>
     </div>

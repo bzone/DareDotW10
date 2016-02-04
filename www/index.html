@@ -118,6 +118,11 @@
                         </ons-toolbar-button>
                     </div>
                     <div class="center">daredot</div>
+                    <div class="right">
+                        <ons-toolbar-button ng-click="openNotifications()">
+                            <ons-icon icon="ion-grid" size="28px" fixed-width="false"></ons-icon>
+                        </ons-toolbar-button>
+                    </div>
                 </ons-toolbar>
                 <div class="dashboard">
                     <div class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{user.image_url}}');"></div>
@@ -132,7 +137,7 @@
                     <div class="clear"></div>
                     <div class="lastChallenge" ng-click="questDetails(user.last_challenge.id)">
                         <div class="top">
-                           <div class="arrow"></div>
+                            <div class="arrow"></div>
                             <div class="labelBlack">Ostatnie wyzwanie</div>
                             <div class="clear"></div>
                             <span class="title">{{user.last_challenge.name}}</span>

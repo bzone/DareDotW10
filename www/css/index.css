@@ -424,8 +424,21 @@ span.title {
     margin-right: 10px;
 }
 
+.doneChart.white {
+    width: 36px;
+    height: 36px;
+    border: solid 3px #FFFFFF;
+    border-radius: 50%;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    float: left;
+    margin-right: 10px;
+}
+
 .locationIcon,
-.playersIcon {
+.playersIcon,
+.pointsIcon {
     width: 36px;
     height: 36px;
     border: solid 3px #E60E2A;
@@ -444,8 +457,34 @@ span.title {
     background-image: url(players.png);
 }
 
+.pointsIcon {
+    background-image: url(pointsicon.png);
+    background-color: #FFF;
+}
+
+.pointsIcon.white {
+    background-image: url(pointsiconwhite.png);
+    border-color: #FFF;
+    background-color: transparent;
+}
+
+.playersIcon.white {
+    background-image: url(playerswhite.png);
+    border-color: #FFF;
+}
+
+.playersIcon.black {
+    background-image: url(playersblack.png);
+    border-color: #2F2A2B;
+}
+
 .locationIcon {
     background-image: url(leaderboard_icon.png);
+}
+
+.locationIcon.white {
+    background-image: url(leaderboard_iconwhite.png);
+    border-color: #FFF;
 }
 
 .doneChart .bar {
@@ -454,6 +493,38 @@ span.title {
     left: 0px;
     bottom: 0px;
     background-color: #E60E2A;
+}
+
+.doneChart.white .bar {
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    background-color: #FFF;
+}
+
+.margin16p {
+    margin-left: 16.5%;
+}
+
+.whiteText {
+    color: #FFF;
+}
+
+.displayInlineBlock {
+    display: inline-block;
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.textRight {
+    text-align: right;
+}
+
+.textLeft {
+    text-align: left;
 }
 
 .userName {
@@ -599,6 +670,18 @@ ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-ios-arrow-back:before {
     content: "";
 }
 
+ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-grid {
+    width: 28px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('notification.png');
+    background-position: center center;
+}
+
+ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-grid:before {
+    content: "";
+}
+
 .task .title {
     margin-top: 0px;
 }
@@ -697,8 +780,45 @@ ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-ios-arrow-back:before {
     text-align: center;
     line-height: 32px;
     color: #9B9B9B;
-    top: 19px;
+    top: 16px;
     left: 25px;
+}
+
+.checklist .whiteTeamPoints {
+    position: absolute;
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    border: solid 2px #E60E2A;
+    background-color: #FFF;
+    text-align: center;
+    line-height: 32px;
+    color: #9B9B9B;
+    top: 16px;
+    left: 15px;
+}
+
+.checklist .whiteTeamPoints.active {
+    position: absolute;
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    border: solid 2px #E60E2A;
+    background-color: #E60E2A;
+    text-align: center;
+    line-height: 32px;
+    color: #9B9B9B;
+    top: 16px;
+    left: 15px;
+    background-image: url('check.png');
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    background-position: 4px 4px;
+}
+
+.checklist .title {
+    text-align: left !important;
+    padding-left: 70px !important;
 }
 
 .blackTeamPoints {
@@ -711,7 +831,7 @@ ons-icon.ng-scope.ons-icon.ons-icon--ion.ion-ios-arrow-back:before {
     text-align: center;
     line-height: 32px;
     color: #9B9B9B;
-    top: 19px;
+    top: 16px;
     right: 25px;
 }
 
@@ -830,4 +950,39 @@ span.location {
 
 .userInList.ranking .leftPart .avatar {
     float: left;
+}
+
+
+/* Dystans */
+
+.numberDistance {
+    width: 100%;
+    text-align: center;
+    font-size: 50px;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    color: #E60E2A;
+}
+
+.distanceProgress {
+    height: 20px;
+    background-color: #E8E8E8;
+    margin: 16px;
+    border-radius: 10px;
+}
+
+.distanceProgress .bar {
+    height: 20px;
+    background-color: #E60E2A;
+    border-radius: 10px;
+    width: 70%;
+}
+
+.activeDot {
+    background-color: #8FD641;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    border-radius: 50%;
+    right: 15px;
 }

@@ -5,7 +5,7 @@
                 <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
             </ons-toolbar-button>
         </div>
-        <div class="center">Nowe wyzwanie</div>
+        <div class="center">{{categoryName}}</div>
         <div class="right">
         </div>
     </ons-toolbar>
@@ -18,13 +18,11 @@
             <div class="top">
                 <div class="arrow"></div>
                 <div class="clear"></div>
-                <span class="title">{{task.name}} {{task.id}}</span><span class="red">koniec: {{task.finish_date | date:'dd.MM.yyyy HH:mm'}}</span>
+                <span class="title">{{task.name}}</span><span class="red">koniec: {{task.finish_date | date:'dd.MM.yyyy HH:mm'}}</span>
             </div>
             <div class="bottom">
                 <div class="box13 borderRight">
-                    <div class="doneChart">
-                        <div class="bar" style="height:{{task.stats.number_of_done_tasks/task.tasks.length*100}}%"></div>
-                    </div>
+                    <div class="pointsIcon"></div>
                     <div class="boxText">{{task.tasks.length}}</div>
                 </div>
                 <div class="box13 borderRight">

@@ -349,6 +349,89 @@
             }
         }
 
+
+        //NOTE: Otwieranie notyfikacji
+        $scope.openNotifications = function () {
+            $scope.currentPage = 'Notifications';
+            $.ajax({
+                type: "GET",
+                url: url + '/api/v1/notification/read',
+                beforeSend: function () {
+                    $("#spinner").css('display', 'block');
+                },
+                data: {
+                    only_unread: 1
+                },
+                headers: {
+                    "api-key": currentApiKey
+                },
+                datatype: 'json',
+                cache: false,
+                success: function (respond) {
+                    window.console && console.log(respond);
+                    if (respond.status == "success") {
+                        window.console && console.log('Pobrano listę notyfikacji');
+                        $scope.notifications = angular.fromJson(respond.data);
+                        naviDash.pushPage('notifications.html');
+                        $("#spinner").fadeOut(1000);
+
+                    } else if (respond.status == "error") {
+                        window.console && console.log('error ' + respond.data);
+                        $("#spinner").fadeOut(1000);
+                        ons.notification.alert({
+                            message: 'Błąd pobierania danych'
+                        });
+                    }
+                },
+                error: function (respond) {
+                    window.console && console.log('error ' + JSON.stringify(respond));
+                    $("#spinner").fadeOut(1000);
+                    ons.notification.alert({
+                        message: 'Podane dane są niepoprawne'
+                    });
+                }
+            });
+        }
+
+
+        //NOTE: Aktualizacja lokalizacji
+        $scope.updateLocation = function () {
+            var onSuccess = function (position) {
+                var currentLocationLat = position.coords.latitude;
+                var currentLocationLong = position.coords.longitude;
+
+                $.ajax({
+                    type: "POST",
+                    url: url + '/api/v1/user/update-location',
+                    beforeSend: function () {},
+                    data: {
+                        latitude: currentLocationLat,
+                        longitude: currentLocationLong
+                    },
+                    headers: {
+                        "api-key": currentApiKey
+                    },
+                    datatype: 'json',
+                    cache: false,
+                    success: function (respond) {
+                        window.console && console.log(respond);
+                        if (respond.status == "success") {
+                            window.console && console.log('Zaktualizowano lokalizacje');
+                        } else if (respond.status == "error") {
+                            window.console && console.log('error ' + respond.data);
+                        }
+                    },
+                    error: function (respond) {
+                        window.console && console.log('error ' + JSON.stringify(respond));
+                    }
+                });
+            };
+
+            var options = {};
+
+            navigator.geolocation.getCurrentPosition(onSuccess, null, options);
+        }
+
         //NOTE: Otwieranie ekranu głównego
         $scope.openHome = function () {
             menu.closeMenu();
@@ -378,7 +461,8 @@
         }
 
         //NOTE: Wyswietlanie wybranej kategorii
-        $scope.getCategory = function (cat) {
+        $scope.getCategory = function (cat, name) {
+            $scope.categoryName = name;
             $.ajax({
                 type: "GET",
                 url: url + '/api/v1/challenge/search',
@@ -587,6 +671,102 @@
             });
         }
 
+        //NOTE: Detale zadania
+        $scope.taskDetails = function (id) {
+            window.console && console.log('Pobieranie detale zdania ' + id);
+            $.ajax({
+                type: "GET",
+                url: url + '/api/v1/user/challenge/tasks',
+                beforeSend: function () {
+                    $("#spinner").css('display', 'block');
+                },
+                headers: {
+                    "api-key": currentApiKey
+                },
+                data: {
+                    task_id: id
+                },
+                datatype: 'json',
+                cache: false,
+                success: function (respond) {
+                    window.console && console.log(respond);
+                    if (respond.status == "success") {
+                        $("#spinner").fadeOut(1000);
+                        $scope.taskDetailsData = angular.fromJson(respond.message);
+                        $scope.taskDetailsData.readyToVerify = 0;
+                        $scope.taskDetailsData.params = angular.fromJson($scope.taskDetailsData.task.lparams);
+                        if ($scope.taskDetailsData.progress) {
+                            $scope.taskDetailsData.progressParams = angular.fromJson($scope.taskDetailsData.progress.lparams);
+                        }
+
+                        // checklista
+                        if ($scope.taskDetailsData.task.type.id == 8) {
+                            $scope.taskDetailsData.display = [];
+
+                            if (!$scope.taskDetailsData.progressParams) {
+                                angular.forEach($scope.taskDetailsData.params.checklist, function (point, key) {
+                                    var listpoint = {
+                                        checklist: point,
+                                        status: 0
+                                    }
+                                    $scope.taskDetailsData.display.push(listpoint);
+
+                                }, true);
+                            } else {
+                                var finished = 0;
+                                angular.forEach($scope.taskDetailsData.params.checklist, function (point, key) {
+                                    var listpoint = {
+                                        checklist: point,
+                                        status: $scope.taskDetailsData.progressParams.status[key]
+                                    }
+                                    if ($scope.taskDetailsData.progressParams.status[key] == 1) {
+                                        finished++;
+                                    }
+                                    $scope.taskDetailsData.display.push(listpoint);
+
+                                }, true);
+                                if ($scope.taskDetailsData.params.checklist.length == finished) {
+                                    $scope.taskDetailsData.readyToVerify = 1;
+                                }
+                            }
+                        }
+
+                        // dystans
+                        if ($scope.taskDetailsData.task.type.id == 6) {
+                            $scope.taskDetailsData.display = [];
+
+                            if ($scope.taskDetailsData.progressParams) {
+                                $scope.taskDetailsData.display.distance = $scope.taskDetailsData.progressParams.distance;
+                                $scope.taskDetailsData.display.tracked = $scope.taskDetailsData.progressParams.tracked;
+                                if ($scope.taskDetailsData.display.tracked >= $scope.taskDetailsData.display.distance) {
+                                    $scope.taskDetailsData.readyToVerify = 1;
+                                }
+                            } else {
+                                $scope.taskDetailsData.display.distance = $scope.taskDetailsData.params.distance;
+                                $scope.taskDetailsData.display.tracked = 0;
+                            }
+                        }
+
+                        if ($scope.taskDetailsData.progress) {
+                            if ($scope.taskDetailsData.progress.waiting_for_verification == 1 || $scope.taskDetailsData.progress.verified == 1) {
+                                $scope.taskDetailsData.readyToVerify = 0;
+                            }
+                        }
+
+                        window.console && console.log('Pobrane detale zdania');
+                        naviDash.pushPage('taskdetails.html');
+                    } else if (respond.status == "error") {
+                        $("#spinner").fadeOut(1000);
+                        window.console && console.log('error ' + respond.data);
+                    }
+                },
+                error: function (respond) {
+                    $("#spinner").fadeOut(1000);
+                    window.console && console.log('error ' + JSON.stringify(respond));
+                }
+            });
+        }
+
         //NOTE: Otwieranie twoich zadan 
         $scope.openYourQuests = function () {
             menu.closeMenu();
@@ -749,6 +929,146 @@
             $('#doneTasks').css('display', 'block');
         }
 
+
+        //NOTE: Przesyłanie zadania do weryfikacji
+        $scope.taskVerify = function (taskid, type) {
+
+            if (type == 8) {
+                var checklist = $scope.taskDetailsData.params.checklist;
+
+                var status = [1];
+
+                var i = 0;
+                for (i = 1; i < $scope.taskDetailsData.params.checklist.length; i++) {
+                    status.push(1);
+                }
+                window.console && console.log(status);
+
+                var dataToSend = {
+                    checklist: checklist,
+                    status: status
+                }
+            }
+
+            dataToSend = JSON.stringify(dataToSend);
+
+            $.ajax({
+                type: "POST",
+                url: url + '/api/v1/user/challenges/task/update',
+                beforeSend: function () {
+                    $("#spinner").css('display', 'block');
+                },
+                data: {
+                    task_id: taskid,
+                    lparams: dataToSend,
+                },
+                headers: {
+                    "api-key": currentApiKey
+                },
+                datatype: 'json',
+                cache: false,
+                success: function (respond) {
+                    window.console && console.log(respond);
+
+                    $.ajax({
+                        type: "POST",
+                        url: url + '/api/v1/user/challenges/task/send-to-verification',
+                        beforeSend: function () {
+                            $("#spinner").css('display', 'block');
+                        },
+                        data: {
+                            task_id: taskid
+                        },
+                        headers: {
+                            "api-key": currentApiKey
+                        },
+                        datatype: 'json',
+                        cache: false,
+                        success: function (respond) {
+                            $("#spinner").fadeOut(1000);
+                            window.console && console.log(respond);
+                            naviDash.popPage();
+                        },
+                        error: function (respond) {
+                            window.console && console.log('error ' + JSON.stringify(respond));
+                            $("#spinner").fadeOut(1000);
+                            ons.notification.alert({
+                                message: 'Podane dane są niepoprawne'
+                            });
+                        }
+                    });
+
+                },
+                error: function (respond) {
+                    window.console && console.log('error ' + JSON.stringify(respond));
+                    $("#spinner").fadeOut(1000);
+                    ons.notification.alert({
+                        message: 'Podane dane są niepoprawne'
+                    });
+                }
+            });
+        }
+
+        $scope.toogleCheck = function (index) {
+            if ($scope.taskDetailsData.progress) {
+                if ($scope.taskDetailsData.progress.waiting_for_verification == 0) {
+                    var tmp = $scope.taskDetailsData.display[index].status;
+                    if (tmp == 1) {
+                        $scope.taskDetailsData.display[index].status = 0;
+                    } else {
+                        $scope.taskDetailsData.display[index].status = 1;
+                    }
+
+                    var finished = 0;
+                    angular.forEach($scope.taskDetailsData.params.checklist, function (point, key) {
+                        if ($scope.taskDetailsData.display[key].status == 1) {
+                            finished++;
+                        }
+                    }, true);
+                    if ($scope.taskDetailsData.params.checklist.length == finished) {
+                        $scope.taskDetailsData.readyToVerify = 1;
+                    } else {
+                        $scope.taskDetailsData.readyToVerify = 0;
+                    }
+                }
+            } else {
+                var tmp = $scope.taskDetailsData.display[index].status;
+                if (tmp == 1) {
+                    $scope.taskDetailsData.display[index].status = 0;
+                } else {
+                    $scope.taskDetailsData.display[index].status = 1;
+                }
+
+                var finished = 0;
+                angular.forEach($scope.taskDetailsData.params.checklist, function (point, key) {
+                    if ($scope.taskDetailsData.display[key].status == 1) {
+                        finished++;
+                    }
+                }, true);
+                if ($scope.taskDetailsData.params.checklist.length == finished) {
+                    $scope.taskDetailsData.readyToVerify = 1;
+                } else {
+                    $scope.taskDetailsData.readyToVerify = 0;
+                }
+            }
+        }
+
+        $scope.distanceStart = function () {
+            $scope.taskDetailsData.display.active = 1;
+            var iFrequency = 5000; // expressed in miliseconds
+            var myInterval = 0;
+
+
+
+            // STARTS and Resets the loop if any
+            function startLoop() {
+                if (myInterval > 0) clearInterval(myInterval); // stop
+                myInterval = setInterval(window.console && console.log(myInterval), iFrequency); // run
+            }
+
+            startLoop();
+
+        }
 
 
     });
