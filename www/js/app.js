@@ -3,6 +3,7 @@
     var module = angular.module('app', ['onsen']);
     var url = "http://daredot.dev.thickmug.com";
     var currentApiKey;
+    var timeinterval = 0;
 
 
     module.controller('AppController', function ($scope, $projekty, $filter) {
@@ -734,7 +735,8 @@
                         // dystans
                         if ($scope.taskDetailsData.task.type.id == 6) {
                             $scope.taskDetailsData.display = [];
-
+                            $scope.taskDetailsData.display.button = "start";
+                            $scope.taskDetailsData.display.location = 0;
                             if ($scope.taskDetailsData.progressParams) {
                                 $scope.taskDetailsData.display.distance = $scope.taskDetailsData.progressParams.distance;
                                 $scope.taskDetailsData.display.tracked = $scope.taskDetailsData.progressParams.tracked;
@@ -1054,19 +1056,72 @@
         }
 
         $scope.distanceStart = function () {
-            $scope.taskDetailsData.display.active = 1;
-            var iFrequency = 5000; // expressed in miliseconds
-            var myInterval = 0;
 
 
 
-            // STARTS and Resets the loop if any
-            function startLoop() {
-                if (myInterval > 0) clearInterval(myInterval); // stop
-                myInterval = setInterval(window.console && console.log(myInterval), iFrequency); // run
+            function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+                var R = 6371; // Radius of the earth in km
+                var dLat = deg2rad(lat2 - lat1); // deg2rad below
+                var dLon = deg2rad(lon2 - lon1);
+                var a =
+                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                var d = R * c; // Distance in km
+                return d;
             }
 
-            startLoop();
+            function deg2rad(deg) {
+                return deg * (Math.PI / 180)
+            }
+
+            var currentLocationLat = "";
+            var currentLocationLong = "";
+            var lastLocationLat = "";
+            var lastLocationLong = "";
+            var newDistance = 0;
+
+
+            var onSuccessRun = function (position) {
+                lastLocationLat = currentLocationLat;
+                lastLocationLong = currentLocationLong;
+                currentLocationLat = position.coords.latitude;
+                currentLocationLong = position.coords.longitude;
+                $scope.taskDetailsData.display.location = position.coords.latitude;
+                $scope.$apply();
+                window.console && console.log('Last:' + lastLocationLat + ':' + lastLocationLong);
+                window.console && console.log('Current:' + currentLocationLat + ':' + currentLocationLong);
+            };
+
+            var options2 = {};
+
+            navigator.geolocation.getCurrentPosition(onSuccessRun, null, options2);
+
+
+
+
+            function startLoop() {
+                timeinterval = setInterval(function () {
+                    navigator.geolocation.getCurrentPosition(onSuccessRun, null, options2);
+                    newDistance = getDistanceFromLatLonInKm(lastLocationLat, lastLocationLong, currentLocationLat, currentLocationLong);
+                    window.console && console.log(newDistance);
+                    if (newDistance < 1000) {
+                        $scope.taskDetailsData.display.tracked = $scope.taskDetailsData.display.tracked + newDistance;
+                    }
+                }, 5000);
+            }
+
+            if ($scope.taskDetailsData.display.button == "start") {
+                $scope.taskDetailsData.display.button = "stop";
+                $scope.taskDetailsData.display.active = 1;
+                startLoop();
+            } else {
+                $scope.taskDetailsData.display.button = "start";
+                $scope.taskDetailsData.display.active = 0;
+                clearInterval(timeinterval);
+
+            }
 
         }
 

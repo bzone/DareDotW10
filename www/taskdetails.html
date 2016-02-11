@@ -27,7 +27,8 @@
             </div>
         </div>
         <div class="contenHolder  noContentPaddings">
-            <a class="submitButton" ng-if="taskDetailsData.readyToVerify==0" ng-click="distanceStart()">start</a>
+            <a class="submitButton" ng-if="taskDetailsData.readyToVerify==0" ng-click="distanceStart()">{{taskDetailsData.display.button}}</a> {{taskDetailsData.display.tracked}}
+            <br/> {{taskDetailsData.display.location}}
         </div>
     </div>
     <!-- NOTE: Typ zadania zdjecia -->
