@@ -9,6 +9,11 @@
     module.controller('AppController', function ($scope, $projekty, $filter) {
         $scope.currentPage = "Home";
 
+
+        $scope.loguj = function (tekst) {
+            window.console && console.log(tekst);
+        }
+
         //NOTE: Logowanie uzytkownika
         $scope.loginUser = function () {
             var user_email = $("#loginEmail").val();
