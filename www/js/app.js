@@ -220,7 +220,6 @@
                         $scope.user.new_avatar = base64Img.split(',')[1];
                         $scope.user.new_avatar_size = getLengthInBytes($scope.user.new_avatar);
                         window.console && console.log($scope.user.new_avatar_size);
-                        console.log($scope.user.new_avatar);
                     });
                 }
             }
@@ -1482,11 +1481,13 @@
                     var dataToSend = {
                         task_id: $scope.taskDetailsData.task.id,
                         lparams: JSON.stringify({
-                            'name': 'Dodane zdjęcie',
-                            'sizeInBytes': tmpphotosize,
-                            'mimeType': 'image/png',
-                            'file_name': 'fsd.png',
-                            'data': tmpphoto
+                            points: {
+                                lat: 51.743050816712,
+                                lng: 19.452592805028,
+                                name: "Lidl",
+                                desc: "Zrob zakupy tutaj po odwiedzeniu",
+                                visited: 1
+                            }
                         })
                     }
 
