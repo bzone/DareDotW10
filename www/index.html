@@ -219,6 +219,575 @@
         </ons-page>
     </ons-template>
 
+    <ons-template id="homedash.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="menu.toggleMenu()">
+                        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">daredot</div>
+                <div class="right">
+                    <ons-toolbar-button ng-click="openNotifications()">
+                        <ons-icon icon="ion-grid" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+            <div class="dashboard">
+                <div class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{user.image_url}}');"></div>
+                <div class="userName">{{user.username}}</div>
+                <div class="userEmail">{{user.email}}</div>
+                <div class="box13"><span class="white">{{user.finished_challenges}}</span>ukończone
+                    <br/>wyzwania</div>
+                <div class="box13"><span class="white">{{user.finished_challenges}}</span>utworzone
+                    <br/>wyzwania</div>
+                <div class="box13"><span class="white">{{user.total_badges}}</span>zdobyte
+                    <br/>odznaki</div>
+                <div class="clear"></div>
+                <div class="lastChallenge" ng-click="questDetails(user.last_challenge.id)">
+                    <div class="top">
+                        <div class="arrow"></div>
+                        <div class="labelBlack">Ostatnie wyzwanie</div>
+                        <div class="clear"></div>
+                        <span class="title">{{user.last_challenge.name}}</span>
+                    </div>
+                    <div class="bottom">
+                        <div class="box13 borderRight">
+                            <div class="doneChart">
+                                <div class="bar" style="height:{{user.last_challenge.stats.number_of_done_tasks/user.last_challenge.tasks.length*100}}%"></div>
+                            </div>
+                            <div class="boxText">{{user.last_challenge.stats.number_of_done_tasks}}/{{user.last_challenge.tasks.length}}</div>
+                        </div>
+                        <div class="box13 borderRight">
+                            <div class="playersIcon"></div>
+                            <div class="boxText">0{{user.last_challenge.stats.number_of_users}}</div>
+                        </div>
+                        <div class="box13">
+                            <div class="locationIcon"></div>
+                            <div class="boxText">#0{{user.last_challenge.stats.location}}</div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <a class="submitButton alternative" ng-click="openYourQuests()">wszystkie aktywne wyzwania</a>
+            </div>
+        </ons-page>
+    </ons-template>
+    <ons-template id="category.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="naviDash.popPage()">
+                        <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">{{categoryName}}</div>
+                <div class="right">
+                </div>
+            </ons-toolbar>
+            <div class="emptyState" ng-if="tasksInCategory.length==0">
+                <div class="emptyCircle"></div>
+                <p>Brak zadań w tej kategori</p>
+            </div>
+            <div class="contenHolder whiteFrame noContentPaddings" id="activeTasks">
+                <div class="task" ng-repeat="task in tasksInCategory" ng-click="questDetails(task.id)">
+                    <div class="top">
+                        <div class="arrow"></div>
+                        <div class="clear"></div>
+                        <span class="title">{{task.name}}</span><span class="red">koniec: {{task.finish_date | date:'dd.MM.yyyy HH:mm'}}</span>
+                    </div>
+                    <div class="bottom">
+                        <div class="box13 borderRight">
+                            <div class="pointsIcon"></div>
+                            <div class="boxText">{{task.tasks.length}}</div>
+                        </div>
+                        <div class="box13 borderRight">
+                            <div class="playersIcon"></div>
+                            <div class="boxText">0{{task.stats.number_of_users}}</div>
+                        </div>
+                        <div class="box13">
+                            <div class="boxText" ng-if="task.multiplayer==1">Gra
+                                <br/>drużynowa</div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+        </ons-page>
+    </ons-template>
+    <ons-template id="questdetails.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="naviDash.popPage()">
+                        <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">daredot</div>
+                <div class="right">
+                </div>
+            </ons-toolbar>
+            <div class="contenHolder" ng-init="updateLocation()">
+                <h3>{{questDetailsData.name}}</h3>
+                <p class="des">{{questDetailsData.description}}</p>
+            </div>
+            <!-- NOTE: Pokaż ikony drużyn - moduł -->
+            <div class="contenHolder" ng-if="userIn() && questDetailsData.multiplayer==0">
+                <div class="box13 whiteText textLeft">
+                    <div class="displayInlineBlock">
+                        <div class="doneChart white">
+                            <div class="bar" style="height:{{detailsMyPoints/questDetailsData.tasks.length*100}}%"></div>
+                        </div>
+                        <div class="boxText">{{detailsMyPoints}}/{{questDetailsData.tasks.length}}</div>
+                    </div>
+                </div>
+                <div class="box13 whiteText textCenter">
+                    <div class="displayInlineBlock">
+                        <div class="playersIcon white"></div>
+                        <div class="boxText">0{{questDetailsData.users.length}}</div>
+                    </div>
+                </div>
+                <div class="box13 whiteText textRight">
+                    <div class="displayInlineBlock">
+                        <div class="locationIcon white"></div>
+                        <div class="boxText">#0{{detailsMyLocation}}</div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="contenHolder" ng-if="!userIn() && questDetailsData.multiplayer==0">
+                <div class="box13 whiteText textLeft margin16p">
+                    <div class="displayInlineBlock">
+                        <div class="pointsIcon white"></div>
+                        <div class="boxText">0{{questDetailsData.tasks.length}}</div>
+                    </div>
+                </div>
+                <div class="box13 whiteText textRight">
+                    <div class="displayInlineBlock">
+                        <div class="playersIcon white"></div>
+                        <div class="boxText">0{{questDetailsData.users.length}}</div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="contenHolder" ng-if="!userIn() && questDetailsData.multiplayer==1">
+                <div class="box13 whiteText textLeft">
+                    <div class="displayInlineBlock">
+                        <div class="pointsIcon white"></div>
+                        <div class="boxText">0{{questDetailsData.tasks.length}}</div>
+                    </div>
+                </div>
+                <div class="box13 whiteText textCenter">
+                    <div class="displayInlineBlock">
+                        <div class="playersIcon white"></div>
+                        <div class="boxText">0{{detailsWhiteTeam}}</div>
+                    </div>
+                </div>
+                <div class="box13 whiteText textRight">
+                    <div class="displayInlineBlock">
+                        <div class="playersIcon black"></div>
+                        <div class="boxText">0{{detailsBlackTeam}}</div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- NOTE: Pokaż wyniki drużyn - moduł -->
+            <div class="contenHolder versus" ng-if="userIn() && questDetailsData.multiplayer==1">
+                <div class="vs">vs</div>
+                <div class="box12">
+                    <div class="circleHolder">
+                        {{questDetailsData.teams_stats.white}}
+                    </div>
+                    <div class="clear"></div>
+                    biali
+                </div>
+                <div class="box12">
+                    <div class="circleHolder black">
+                        {{questDetailsData.teams_stats.black}}
+                    </div>
+                    <div class="clear"></div>
+                    czarni
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- NOTE: Pokaż listę graczy - moduł -->
+            <div class="contenHolder" ng-if="userIn() && questDetailsData.multiplayer==1">
+                <a class="submitButton" ng-click="playersList(questDetailsData.id)">pokaż listę graczy</a>
+            </div>
+            <!-- NOTE: Pokaż ranking - moduł -->
+            <div class="contenHolder" ng-if="userIn() && questDetailsData.multiplayer==0">
+                <a class="submitButton" ng-click="playersRanking(questDetailsData.id)">pokaż ranking graczy</a>
+            </div>
+            <!-- NOTE: Pokaż liste zadan multiplayer/przydzielone/aktywne -->
+            <div class="contenHolder whiteFrame noContentPaddings" ng-if="userIn() && questDetailsData.multiplayer==1 && questActive()">
+                <div class="task" ng-repeat="task in questDetailsData.teams_stats.tasks" ng-click="taskDetails(task.id)">
+                    <div class="multiplayerTask">
+                        <div class="whiteTeamPoints" ng-if="task.white==0">{{task.difficulty}}</div>
+                        <div class="whiteTeamPoints active" ng-if="task.white!=0">{{task.difficulty}}</div>
+                        <div class="blackTeamPoints" ng-if="task.black==0">{{task.difficulty}}</div>
+                        <div class="blackTeamPoints active" ng-if="task.black!=0">{{task.difficulty}}</div>
+                        <span class="title">{{task.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- NOTE: Pokaż liste zadan multiplayer/przydzielone/aktywne -->
+            <div class="contenHolder whiteFrame noContentPaddings" ng-if="userIn() && questDetailsData.multiplayer==1 && !questActive()">
+                <div class="task" ng-repeat="task in questDetailsData.teams_stats.tasks">
+                    <div class="multiplayerTask">
+                        <div class="whiteTeamPoints" ng-if="task.white==0">{{task.difficulty}}</div>
+                        <div class="whiteTeamPoints active" ng-if="task.white!=0">{{task.difficulty}}</div>
+                        <div class="blackTeamPoints" ng-if="task.black==0">{{task.difficulty}}</div>
+                        <div class="blackTeamPoints active" ng-if="task.black!=0">{{task.difficulty}}</div>
+                        <span class="title">{{task.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- NOTE: Pokaż liste zadan multiplayer/nieprzydzielone/aktywne -->
+            <div class="contenHolder whiteFrame noContentPaddings" ng-if="!userIn() && questDetailsData.multiplayer==1&& questActive()">
+                <div class="task" ng-repeat="task in questDetailsData.teams_stats.tasks">
+                    <div class="multiplayerTask">
+                        <div class="type type{{task.type}}"></div>
+                        <span class="title">{{task.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- NOTE: Pokaż liste zadan multiplayer/nieprzydzielone/aktywne -->
+            <div class="contenHolder whiteFrame noContentPaddings" ng-if="!userIn() && questDetailsData.multiplayer==0&& questActive()">
+                <div class="task" ng-repeat="task in questDetailsData.tasks">
+                    <div class="multiplayerTask">
+                        <div class="type type{{task.type.id}}"></div>
+                        <span class="title">{{task.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- NOTE: Pokaż liste zadan single/przydzielone/aktywne -->
+            <div class="contenHolder whiteFrame noContentPaddings" ng-if="userIn() && questDetailsData.multiplayer==0 && questActive()">
+                <div class="task" ng-repeat="task in questDetailsData.tasks" ng-click="taskDetails(task.id)">
+                    <div class="multiplayerTask">
+                        <div class="arrow"></div>
+                        <div class="whiteTeamPoints" ng-if="task.verified==0">{{task.difficulty}}</div>
+                        <div class="whiteTeamPoints active" ng-if="task.verified!=0">{{task.difficulty}}</div>
+                        <span class="title">{{task.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- NOTE: Pokaż liste zadan single/przydzielone/nieaktywne -->
+            <div class="contenHolder whiteFrame noContentPaddings" ng-if="userIn() && questDetailsData.multiplayer==0 && !questActive()">
+                <div class="task" ng-repeat="task in questDetailsData.tasks">
+                    <div class="multiplayerTask">
+                        <div class="whiteTeamPoints" ng-if="task.verified==0">{{task.difficulty}}</div>
+                        <div class="whiteTeamPoints active" ng-if="task.verified!=0">{{task.difficulty}}</div>
+                        <span class="title">{{task.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="contenHolder  noContentPaddings" ng-if="!userIn() && questDetailsData.multiplayer==0 && questActive()">
+                <a class="submitButton" ng-click="joinQuest(questDetailsData.id,'none')">dołącz do zestawu zadań</a>
+            </div>
+            <div class="contenHolder  noContentPaddings" ng-if="!userIn() && questDetailsData.multiplayer==1 && questActive()">
+                <a class="submitButton white" ng-click="joinQuest(questDetailsData.id,'white')">dołącz do białej drużyny</a>
+                <a class="submitButton" ng-click="joinQuest(questDetailsData.id,'black')">dołącz do czarnej drużyny</a>
+            </div>
+            <div class="clear"></div>
+        </ons-page>
+    </ons-template>
+    <ons-template id="playerlist.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="naviDash.popPage()">
+                        <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">lista graczy</div>
+            </ons-toolbar>
+            <div class="contenHolder whiteFrame noContentPaddings">
+                <div class="task" ng-repeat="userLoop in questDetailsData.users">
+                    <div class="userInList currentUser" ng-if="userLoop.id==user.id">
+                        <div class="leftPart">
+                            <div class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{userLoop.image_url}}');"></div>
+                        </div>
+                        <span class="username">{{userLoop.username}}</span>
+                        <span class="red">{{userLoop.completed}}/{{questDetailsData.tasks.length}} <span ng-if="userLoop.last_task_done_at"> | {{userLoop.last_task_done_at | date:'dd.MM.yyyy HH:mm'}}</span></span>
+                    </div>
+                    <div class="userInList" ng-if="userLoop.id!=user.id" ng-click="comparePlayers(questDetailsData.id,userLoop.id)">
+                        <div class="arrow"></div>
+                        <div class="leftPart">
+                            <div class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{userLoop.image_url}}');"></div>
+                        </div>
+                        <span class="username">{{userLoop.username}}</span>
+                        <span class="red">{{userLoop.completed}}/{{questDetailsData.tasks.length}} <span ng-if="userLoop.last_task_done_at"> | {{userLoop.last_task_done_at | date:'dd.MM.yyyy HH:mm'}}</span></span>
+                    </div>
+                </div>
+            </div>
+        </ons-page>
+    </ons-template>
+    <ons-template id="compare.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="naviDash.popPage()">
+                        <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">porównanie graczy</div>
+                <div class="right">
+                </div>
+            </ons-toolbar>
+            <!-- NOTE: Pokaż wyniki drużyn - moduł -->
+            <div class="contenHolder versus">
+                <div class="vs">vs</div>
+                <div class="box12">
+                    <div class="circleHolder" style="background-image:url('http://daredot.dev.thickmug.com{{user.image_url}}');" ng-if="user.image_url">
+                    </div>
+                    <div class="circleHolder" style="background-image:url('img/noavatar.png');" ng-if="!user.image_url">
+                    </div>
+                    <div class="clear"></div>{{user.first_name}}
+                    <br/>{{user.last_name}}
+                    <br/><strong>{{myPoints}}</strong>
+                </div>
+                <div class="box12">
+                    <div class="circleHolder" style="background-image:url('http://daredot.dev.thickmug.com{{compereWith.image_url}}');" ng-if="compereWith.image_url">
+                    </div>
+                    <div class="circleHolder" style="background-image:url('img/noavatar.png');" ng-if="!compereWith.image_url">
+                    </div>
+                    <div class="clear"></div>{{compereWith.first_name}}
+                    <br/>{{compereWith.last_name}}
+                    <br/><strong>{{otherPoints}}</strong>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="contenHolder whiteFrame noContentPaddings">
+                <div class="task" ng-repeat="task in compare">
+                    <div class="multiplayerTask">
+                        <div class="whiteTeamPoints" ng-if="task.verifiedMy==0">{{task.difficulty}}</div>
+                        <div class="whiteTeamPoints active" ng-if="task.verifiedMy!=0">{{task.difficulty}}</div>
+                        <div class="blackTeamPoints" ng-if="task.verified==0">{{task.difficulty}}</div>
+                        <div class="blackTeamPoints active" ng-if="task.verified!=0">{{task.difficulty}}</div>
+                        <span class="title">{{task.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </ons-page>
+    </ons-template>
+    <ons-template id="playerranking.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="naviDash.popPage()">
+                        <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">lista graczy</div>
+            </ons-toolbar>
+            <div class="contenHolder whiteFrame noContentPaddings">
+                <div class="task" ng-repeat="userLoop in questDetailsData.users">
+                    <div class="userInList ranking currentUser" ng-if="userLoop.id==user.id">
+                        <div class="leftPart">
+                            <span class="location">#0{{userLoop.location}}</span>
+                            <div class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{userLoop.image_url}}');" ng-if="userLoop.image_url"></div>
+                            <div class="avatar" style="background-image:url('img/noavatar.png');" ng-if="!userLoop.image_url"></div>
+                        </div>
+                        <span class="username">{{userLoop.username}}</span>
+                        <span class="red">{{userLoop.completed}}/{{questDetailsData.tasks.length}} <span ng-if="userLoop.last_task_done_at"> | {{userLoop.last_task_done_at | date:'dd.MM.yyyy HH:mm'}}</span></span>
+                    </div>
+                    <div class="userInList ranking" ng-if="userLoop.id!=user.id" ng-click="comparePlayers(questDetailsData.id,userLoop.id)">
+                        <div class="arrow"></div>
+                        <div class="leftPart">
+                            <span class="location">#0{{userLoop.location}}</span>
+                            <div class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{userLoop.image_url}}');" ng-if="userLoop.image_url"></div>
+                            <div class="avatar" style="background-image:url('img/noavatar.png');" ng-if="!userLoop.image_url"></div>
+                        </div>
+                        <span class="username">{{userLoop.username}}</span>
+                        <span class="red">{{userLoop.completed}}/{{questDetailsData.tasks.length}} <span ng-if="userLoop.last_task_done_at"> | {{userLoop.last_task_done_at | date:'dd.MM.yyyy HH:mm'}}</span></span>
+                    </div>
+                </div>
+            </div>
+        </ons-page>
+    </ons-template>
+    <ons-template id="notifications.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="naviDash.popPage()">
+                        <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">notyfikacje</div>
+            </ons-toolbar>
+            <div class="contenHolder whiteFrame noContentPaddings">
+                <div class="task" ng-repeat="element in notifications">
+                    <div class="userInList" ng-if="element.action=='assign_challenge'" ng-click="questDetails(element.object_id)" style="height: 66px;">
+                        <div class="arrow"></div>
+                        <div class="leftPart">
+                            <div class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{element.sender.image_url}}');" ng-if="element.sender.image_url!='null'"></div>
+                            <div class="avatar" style="background-image:url('img/noavatar.png');" ng-if="element.sender.image_url=='null'"></div>
+                        </div>
+                        <span class="username" style="font-size:16px;">Zaproszenie do zestawu:<br/>{{element.object.name}}</span>
+                        <span class="red">{{element.sender.first_name}} {{element.sender.last_name}}</span>
+                    </div>
+                </div>
+            </div>
+        </ons-page>
+    </ons-template>
+    <ons-template id="taskdetails.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="naviDash.popPage()">
+                        <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">zadanie</div>
+                <div class="right">
+                </div>
+            </ons-toolbar>
+            <div class="contenHolder" ng-init="updateLocation()">
+                <h3>{{taskDetailsData.task.name}}</h3>
+                <p class="des">{{taskDetailsData.task.description}}</p>
+            </div>
+            <!-- NOTE: Typ zadania dystans -->
+            <div ng-if="taskDetailsData.task.type.id==6">
+                <div class="contenHolder whiteFrame noContentPaddings">
+                    <div class="top" style="margin-bottom:5px;">
+                        <div class="activeDot" ng-if="taskDetailsData.display.active==1"></div>
+                        <div class="labelBlack">Przejedź {{taskDetailsData.display.distance}}KM:</div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="numberDistance">{{taskDetailsData.display.tracked | number:1}}/{{taskDetailsData.display.distance | number:0}}km</div>
+                    <div class="distanceProgress">
+                        <div class="bar" style="width:{{taskDetailsData.display.tracked/taskDetailsData.display.distance*100}}%;"></div>
+                    </div>
+                </div>
+                <div class="contenHolder  noContentPaddings">
+                    <a class="submitButton" ng-if="taskDetailsData.readyToVerify==0" ng-click="distanceStart()">{{taskDetailsData.display.button}}</a> {{taskDetailsData.display.tracked}}
+                    <br/> {{taskDetailsData.display.location}}
+                </div>
+            </div>
+            <!-- NOTE: Typ zadania zdjecia -->
+            <div class="contenHolder whiteFrame noContentPaddings" ng-if="taskDetailsData.task.type.id==9">
+                <div class="top" style="margin-bottom:5px;">
+                    <div class="labelBlack">Wykonaj {{taskDetailsData.display.images.length}} zdjęć:</div>
+                </div>
+                <div class="clear"></div>
+                <div class="task" ng-repeat="photo in taskDetailsData.display.images track by $index">
+                    <div class="photoJest" ng-if="photo.jest==1">
+                        <div class="photoImage" style="background-image:url('http://daredot.dev.thickmug.com{{photo.url}}');"></div>
+                        <div class="title">{{photo.name}}</div>
+                        <div class="action remove" ng-click="removePhoto(photo.id,$index)"></div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="photoJest" ng-if="photo.jest==0">
+                        <div class="title">{{photo.name}}</div>
+                        <div class="action add" ng-click="addPhoto($index)"></div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- NOTE: Typ zadania miejsca -->
+            <div class="contenHolder whiteFrame noContentPaddings" ng-if="taskDetailsData.task.type.id==10">
+                <div class="top" style="margin-bottom:5px;">
+                    <div class="labelBlack">Odwiedź {{taskDetailsData.display.places.length}} miejsce:</div>
+                </div>
+                <div class="clear"></div>
+                <div class="task" ng-repeat="place in taskDetailsData.display.places track by $index">
+                    <div class="multiplayerTask checklist textLeft">
+                        <div class="whiteTeamPoints" ng-if="place.visited==0"></div>
+                        <div class="whiteTeamPoints active" ng-if="place.visited!=0"></div>
+                        <span class="title">{{place.name}}</span>
+                        <div class="map" ng-click="showOnMap(place.lat,place.lng)"></div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- NOTE: Typ zadania checklista -->
+            <div class="contenHolder whiteFrame noContentPaddings" ng-if="taskDetailsData.task.type.id==8">
+                <div class="top" style="margin-bottom:5px;">
+                    <div class="labelBlack">Wykonaj {{taskDetailsData.params.checklist.length}} zadań:</div>
+                </div>
+                <div class="task" ng-repeat="task in taskDetailsData.display track by $index" ng-click="toogleCheck($index)">
+                    <div class="multiplayerTask checklist textLeft">
+                        <div class="whiteTeamPoints" ng-if="task.status==0"></div>
+                        <div class="whiteTeamPoints active" ng-if="task.status!=0"></div>
+                        <span class="title">{{task.checklist}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contenHolder  noContentPaddings">
+                <a class="submitButton inactive" ng-click="taskVerify(taskDetailsData.task.id,taskDetailsData.task.type.id)" ng-if="taskDetailsData.readyToVerify==1">prześlij do weryfikacji</a>
+                <a class="submitButton inactive" style="opacity:0.5;" ng-if="taskDetailsData.readyToVerify==0">prześlij do weryfikacji</a>
+            </div>
+            <div class="contenHolder  noContentPaddings textCenter" ng-if="taskDetailsData.progress.waiting_for_verification==1 && taskDetailsData.progress.verified==0">
+                oczekuje na weryfikację
+            </div>
+            <div class="contenHolder  noContentPaddings textCenter" ng-if="taskDetailsData.progress.verified==1">
+                zadanie zweryfikowane
+            </div>
+            <div class="clear"></div>
+        </ons-page>
+    </ons-template>
+    <ons-template id="addquest.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="menu.toggleMenu()">
+                        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">Nowe wyzwanie</div>
+                <div class="right">
+
+                </div>
+            </ons-toolbar>
+            <div class="contenHolder">
+                <div class="bigLogo" style="height:80px;"></div>
+                <center>
+                    <p>Wybierz interesującą Cię kategorie wyzwań</p>
+                </center>
+            </div>
+            <div class="clear"></div>
+            <div class="contenHolder whiteFrame">
+                <ul class="list">
+                    <li class="list__item" ng-click="getCategory(4,'Impreza')">
+                        <ons-row align="center" class="row ons-row-inner row-center">
+                            <div class="arrow"></div>
+                            <ons-col class="col ons-col-inner">Impreza</ons-col>
+                        </ons-row>
+                    </li>
+                    <li class="list__item" ng-click="getCategory(2,'Kultura i historia')">
+                        <ons-row align="center" class="row ons-row-inner row-center">
+                            <div class="arrow"></div>
+                            <ons-col class="col ons-col-inner">Kultura i historia</ons-col>
+                        </ons-row>
+                    </li>
+                    <li class="list__item" ng-click="getCategory(3,'Rozrywka')">
+                        <ons-row align="center" class="row ons-row-inner row-center">
+                            <div class="arrow"></div>
+                            <ons-col class="col ons-col-inner">Rozrywka</ons-col>
+                        </ons-row>
+                    </li>
+                    <li class="list__item" ng-click="getCategory(5,'Sport')">
+                        <ons-row align="center" class="row ons-row-inner row-center">
+                            <div class="arrow"></div>
+                            <ons-col class="col ons-col-inner">Sport</ons-col>
+                        </ons-row>
+                    </li>
+                    <li class="list__item" ng-click="getCategory(1,'Turystyka')">
+                        <ons-row align="center" class="row ons-row-inner row-center">
+                            <div class="arrow"></div>
+                            <ons-col class="col ons-col-inner">Turystyka</ons-col>
+                        </ons-row>
+                    </li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </ons-page>
+    </ons-template>
     <ons-template id="settings.html">
         <ons-page>
             <ons-toolbar>
