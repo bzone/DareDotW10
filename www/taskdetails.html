@@ -32,17 +32,45 @@
         </div>
     </div>
     <!-- NOTE: Typ zadania zdjecia -->
-    <div class="contenHolder whiteFrame " ng-if="taskDetailsData.task.type.id==9">
-        zdjecia hehe
+    <div class="contenHolder whiteFrame noContentPaddings" ng-if="taskDetailsData.task.type.id==9">
+        <div class="top" style="margin-bottom:5px;">
+            <div class="labelBlack">Wykonaj {{taskDetailsData.display.images.length}} zdjęć:</div>
+        </div>
+        <div class="clear"></div>
+        <div class="task" ng-repeat="photo in taskDetailsData.display.images track by $index">
+            <div class="photoJest" ng-if="photo.jest==1">
+                <div class="photoImage" style="background-image:url('http://daredot.dev.thickmug.com{{photo.url}}');"></div>
+                <div class="title">{{photo.name}}</div>
+                <div class="action remove" ng-click="removePhoto(photo.id,$index)"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="photoJest" ng-if="photo.jest==0">
+                <div class="title">{{photo.name}}</div>
+                <div class="action add" ng-click="addPhoto($index)"></div>
+                <div class="clear"></div>
+            </div>
+        </div>
     </div>
-    <!-- NOTE: Typ zadania zdjecia -->
-    <div class="contenHolder whiteFrame " ng-if="taskDetailsData.task.type.id==10">
-        lokalizacje hehe
+    <!-- NOTE: Typ zadania miejsca -->
+    <div class="contenHolder whiteFrame noContentPaddings" ng-if="taskDetailsData.task.type.id==10">
+        <div class="top" style="margin-bottom:5px;">
+            <div class="labelBlack">Odwiedź {{taskDetailsData.display.places.length}} miejsce:</div>
+        </div>
+        <div class="clear"></div>
+        <div class="task" ng-repeat="place in taskDetailsData.display.places track by $index">
+            <div class="multiplayerTask checklist textLeft">
+                <div class="whiteTeamPoints" ng-if="place.visited==0"></div>
+                <div class="whiteTeamPoints active" ng-if="place.visited!=0"></div>
+                <span class="title">{{place.name}}</span>
+                <div class="map" ng-click="showOnMap(place.lat,place.lng)"></div>
+            </div>
+        </div>
+
     </div>
     <!-- NOTE: Typ zadania checklista -->
     <div class="contenHolder whiteFrame noContentPaddings" ng-if="taskDetailsData.task.type.id==8">
         <div class="top" style="margin-bottom:5px;">
-            <div class="labelBlack">Wykonaj {{taskDetailsData.params.checklist.length}} zadania:</div>
+            <div class="labelBlack">Wykonaj {{taskDetailsData.params.checklist.length}} zadań:</div>
         </div>
         <div class="task" ng-repeat="task in taskDetailsData.display track by $index" ng-click="toogleCheck($index)">
             <div class="multiplayerTask checklist textLeft">
@@ -52,8 +80,6 @@
             </div>
         </div>
     </div>
-
-
 
     <div class="contenHolder  noContentPaddings">
         <a class="submitButton inactive" ng-click="taskVerify(taskDetailsData.task.id,taskDetailsData.task.type.id)" ng-if="taskDetailsData.readyToVerify==1">prześlij do weryfikacji</a>

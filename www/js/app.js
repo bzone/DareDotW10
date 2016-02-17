@@ -749,6 +749,62 @@
                             }
                         }
 
+                        //zdjecia 
+                        if ($scope.taskDetailsData.task.type.id == 9) {
+                            $scope.taskDetailsData.display = [];
+                            $scope.taskDetailsData.display.images = [];
+                            for (var i = 1; i <= $scope.taskDetailsData.params.number_of_photos; i++) {
+                                var photo = {
+                                    id: i,
+                                    name: 'Dodaj zdjęcie',
+                                    url: '',
+                                    jest: 0
+                                }
+                                $scope.taskDetailsData.display.images.push(photo);
+                            }
+
+
+                            if ($scope.taskDetailsData.progressParams) {
+                                var zdjecia = 0;
+                                angular.forEach($scope.taskDetailsData.progressParams.images, function (point, key) {
+                                    zdjecia++;
+                                    $scope.taskDetailsData.display.images[key].id = point.id;
+                                    $scope.taskDetailsData.display.images[key].name = point.name;
+                                    $scope.taskDetailsData.display.images[key].url = point.url;
+                                    $scope.taskDetailsData.display.images[key].jest = 1;
+                                }, true);
+                                if (zdjecia == $scope.taskDetailsData.progressParams.number_of_photos) {
+                                    $scope.taskDetailsData.readyToVerify = 1;
+                                }
+
+                            } else {
+
+                            }
+                        }
+
+                        //miejsca 
+                        if ($scope.taskDetailsData.task.type.id == 10) {
+                            $scope.taskDetailsData.display = [];
+                            $scope.taskDetailsData.display.places = [];
+                            for (var i = 0; i < $scope.taskDetailsData.params.points.length; i++) {
+                                var place = {
+                                    name: $scope.taskDetailsData.params.points[i].name,
+                                    lng: $scope.taskDetailsData.params.points[i].lng,
+                                    lat: $scope.taskDetailsData.params.points[i].lat,
+                                    message: $scope.taskDetailsData.params.points[i].message,
+                                    visited: 0
+                                }
+                                $scope.taskDetailsData.display.places.push(place);
+                            }
+
+
+                            if ($scope.taskDetailsData.progressParams) {
+
+                            } else {
+
+                            }
+                        }
+
                         if ($scope.taskDetailsData.progress) {
                             if ($scope.taskDetailsData.progress.waiting_for_verification == 1 || $scope.taskDetailsData.progress.verified == 1) {
                                 $scope.taskDetailsData.readyToVerify = 0;
@@ -937,78 +993,113 @@
 
             if (type == 8) {
                 var checklist = $scope.taskDetailsData.params.checklist;
-
                 var status = [1];
-
                 var i = 0;
                 for (i = 1; i < $scope.taskDetailsData.params.checklist.length; i++) {
                     status.push(1);
                 }
                 window.console && console.log(status);
-
                 var dataToSend = {
                     checklist: checklist,
                     status: status
                 }
             }
 
+            if (type == 6) {
+                var dataToSend = {
+                    distance: $scope.taskDetailsData.display.distance,
+                    tracked: $scope.taskDetailsData.display.tracked
+                }
+            }
+
             dataToSend = JSON.stringify(dataToSend);
 
-            $.ajax({
-                type: "POST",
-                url: url + '/api/v1/user/challenges/task/update',
-                beforeSend: function () {
-                    $("#spinner").css('display', 'block');
-                },
-                data: {
-                    task_id: taskid,
-                    lparams: dataToSend,
-                },
-                headers: {
-                    "api-key": currentApiKey
-                },
-                datatype: 'json',
-                cache: false,
-                success: function (respond) {
-                    window.console && console.log(respond);
 
-                    $.ajax({
-                        type: "POST",
-                        url: url + '/api/v1/user/challenges/task/send-to-verification',
-                        beforeSend: function () {
-                            $("#spinner").css('display', 'block');
-                        },
-                        data: {
-                            task_id: taskid
-                        },
-                        headers: {
-                            "api-key": currentApiKey
-                        },
-                        datatype: 'json',
-                        cache: false,
-                        success: function (respond) {
-                            $("#spinner").fadeOut(1000);
-                            window.console && console.log(respond);
-                            naviDash.popPage();
-                        },
-                        error: function (respond) {
-                            window.console && console.log('error ' + JSON.stringify(respond));
-                            $("#spinner").fadeOut(1000);
-                            ons.notification.alert({
-                                message: 'Podane dane są niepoprawne'
-                            });
-                        }
-                    });
+            if (type == 6 || type == 8) {
+                $.ajax({
+                    type: "POST",
+                    url: url + '/api/v1/user/challenges/task/update',
+                    beforeSend: function () {
+                        $("#spinner").css('display', 'block');
+                    },
+                    data: {
+                        task_id: taskid,
+                        lparams: dataToSend,
+                    },
+                    headers: {
+                        "api-key": currentApiKey
+                    },
+                    datatype: 'json',
+                    cache: false,
+                    success: function (respond) {
+                        window.console && console.log(respond);
 
-                },
-                error: function (respond) {
-                    window.console && console.log('error ' + JSON.stringify(respond));
-                    $("#spinner").fadeOut(1000);
-                    ons.notification.alert({
-                        message: 'Podane dane są niepoprawne'
-                    });
-                }
-            });
+                        $.ajax({
+                            type: "POST",
+                            url: url + '/api/v1/user/challenges/task/send-to-verification',
+                            beforeSend: function () {
+                                $("#spinner").css('display', 'block');
+                            },
+                            data: {
+                                task_id: taskid
+                            },
+                            headers: {
+                                "api-key": currentApiKey
+                            },
+                            datatype: 'json',
+                            cache: false,
+                            success: function (respond) {
+                                $("#spinner").fadeOut(1000);
+                                window.console && console.log(respond);
+                                naviDash.popPage();
+                            },
+                            error: function (respond) {
+                                window.console && console.log('error ' + JSON.stringify(respond));
+                                $("#spinner").fadeOut(1000);
+                                ons.notification.alert({
+                                    message: 'Podane dane są niepoprawne'
+                                });
+                            }
+                        });
+
+                    },
+                    error: function (respond) {
+                        window.console && console.log('error ' + JSON.stringify(respond));
+                        $("#spinner").fadeOut(1000);
+                        ons.notification.alert({
+                            message: 'Podane dane są niepoprawne'
+                        });
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: url + '/api/v1/user/challenges/task/send-to-verification',
+                    beforeSend: function () {
+                        $("#spinner").css('display', 'block');
+                    },
+                    data: {
+                        task_id: taskid
+                    },
+                    headers: {
+                        "api-key": currentApiKey
+                    },
+                    datatype: 'json',
+                    cache: false,
+                    success: function (respond) {
+                        $("#spinner").fadeOut(1000);
+                        window.console && console.log(respond);
+                        naviDash.popPage();
+                    },
+                    error: function (respond) {
+                        window.console && console.log('error ' + JSON.stringify(respond));
+                        $("#spinner").fadeOut(1000);
+                        ons.notification.alert({
+                            message: 'Podane dane są niepoprawne'
+                        });
+                    }
+                });
+            }
         }
 
         $scope.toogleCheck = function (index) {
@@ -1056,9 +1147,6 @@
         }
 
         $scope.distanceStart = function () {
-
-
-
             function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
                 var R = 6371; // Radius of the earth in km
                 var dLat = deg2rad(lat2 - lat1); // deg2rad below
@@ -1099,8 +1187,6 @@
             navigator.geolocation.getCurrentPosition(onSuccessRun, null, options2);
 
 
-
-
             function startLoop() {
                 timeinterval = setInterval(function () {
                     navigator.geolocation.getCurrentPosition(onSuccessRun, null, options2);
@@ -1108,6 +1194,45 @@
                     window.console && console.log(newDistance);
                     if (newDistance < 1000) {
                         $scope.taskDetailsData.display.tracked = $scope.taskDetailsData.display.tracked + newDistance;
+                        if ($scope.taskDetailsData.display.tracked >= $scope.taskDetailsData.display.distance) {
+                            $scope.taskDetailsData.display.button = "zakończone";
+                            $scope.taskDetailsData.display.active = 0;
+                            $scope.taskDetailsData.readyToVerify == 1;
+                            clearInterval(timeinterval);
+
+                            var dataToSend = {
+                                distance: $scope.taskDetailsData.display.distance,
+                                tracked: $scope.taskDetailsData.display.tracked
+                            }
+                            dataToSend = JSON.stringify(dataToSend);
+
+                            $.ajax({
+                                type: "POST",
+                                url: url + '/api/v1/user/challenges/task/update',
+                                beforeSend: function () {
+
+                                },
+                                data: {
+                                    task_id: $scope.taskDetailsData.task.id,
+                                    lparams: dataToSend,
+                                },
+                                headers: {
+                                    "api-key": currentApiKey
+                                },
+                                datatype: 'json',
+                                cache: false,
+                                success: function (respond) {
+                                    window.console && console.log(respond);
+                                },
+                                error: function (respond) {
+                                    window.console && console.log('error ' + JSON.stringify(respond));
+                                    $("#spinner").fadeOut(1000);
+                                    ons.notification.alert({
+                                        message: 'Podane dane są niepoprawne'
+                                    });
+                                }
+                            });
+                        }
                     }
                 }, 5000);
             }
@@ -1120,12 +1245,331 @@
                 $scope.taskDetailsData.display.button = "start";
                 $scope.taskDetailsData.display.active = 0;
                 clearInterval(timeinterval);
+                var dataToSend = {
+                    distance: $scope.taskDetailsData.display.distance,
+                    tracked: $scope.taskDetailsData.display.tracked
+                }
+                dataToSend = JSON.stringify(dataToSend);
 
+
+                $.ajax({
+                    type: "POST",
+                    url: url + '/api/v1/user/challenges/task/update',
+                    beforeSend: function () {},
+                    data: {
+                        task_id: $scope.taskDetailsData.task.id,
+                        lparams: dataToSend,
+                    },
+                    headers: {
+                        "api-key": currentApiKey
+                    },
+                    datatype: 'json',
+                    cache: false,
+                    success: function (respond) {
+                        window.console && console.log(respond);
+                    },
+                    error: function (respond) {
+                        window.console && console.log('error ' + JSON.stringify(respond));
+                        $("#spinner").fadeOut(1000);
+                        ons.notification.alert({
+                            message: 'Podane dane są niepoprawne'
+                        });
+                    }
+                });
             }
-
         }
 
 
+        $scope.removePhoto = function (id, index) {
+            $.ajax({
+                type: "POST",
+                url: url + '/api/v1/user/challenges/task/remove-image',
+                beforeSend: function () {
+                    $("#spinner").css('display', 'block');
+                },
+                data: {
+                    image_id: id
+                },
+                headers: {
+                    "api-key": currentApiKey
+                },
+                datatype: 'json',
+                cache: false,
+                success: function (respond) {
+                    window.console && console.log(respond);
+
+                    $scope.taskDetailsData.display.images[index].jest = 0;
+                    $scope.taskDetailsData.display.images[index].name = "Dodaj zdjęcie";
+                    $scope.$apply();
+
+                    $("#spinner").fadeOut(1000);
+                },
+                error: function (respond) {
+                    window.console && console.log('error ' + JSON.stringify(respond));
+                    $("#spinner").fadeOut(1000);
+                    ons.notification.alert({
+                        message: 'Podane dane są niepoprawne'
+                    });
+                }
+            });
+        }
+
+        //NOTE: Dodawanie zdjecia
+        $scope.addPhoto = function (numer) {
+            function convertToDataURLviaCanvas(url, callback, outputFormat) {
+                var img = new Image();
+                img.crossOrigin = 'Anonymous';
+                img.onload = function () {
+                    var canvas = document.createElement('CANVAS');
+                    var ctx = canvas.getContext('2d');
+                    var dataURL;
+                    canvas.height = this.height * 0.1;
+                    canvas.width = this.width * 0.1;
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate(90 * Math.PI / 180);
+                    ctx.translate(-canvas.width / 2, -canvas.height / 2);
+                    ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+                    dataURL = canvas.toDataURL(outputFormat);
+                    callback(dataURL);
+                    canvas = null;
+                };
+                img.src = url;
+            }
+
+            function getLengthInBytes(str) {
+                var b = str.match(/[^\x00-\xff]/g);
+                return (str.length + (!b ? 0 : b.length));
+            }
+
+            function captureSuccess(mediaFiles) {
+                var i, len;
+                for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+                    var avatrUzytkownika = mediaFiles[i].fullPath;
+                    convertToDataURLviaCanvas(avatrUzytkownika, function (base64Img) {
+                        avatrUzytkownika = base64Img;
+                        window.console && console.log('Zdjecie pobrane');
+                        var tmpphoto = base64Img.split(',')[1];
+                        var tmpphotosize = getLengthInBytes(tmpphoto);
+                        window.console && console.log(tmpphotosize);
+                        window.console && console.log('Zdjecie pobrane 2');
+                        var dataToSend = {
+                            task_id: $scope.taskDetailsData.task.id,
+                            lparams: JSON.stringify({
+                                'name': 'Dodane zdjęcie',
+                                'sizeInBytes': tmpphotosize,
+                                'mimeType': 'image/png',
+                                'file_name': 'fsd.png',
+                                'data': tmpphoto
+                            })
+                        }
+
+                        $.ajax({
+                            type: "POST",
+                            url: url + '/api/v1/user/challenges/task/update',
+                            beforeSend: function () {
+                                $("#spinner").css('display', 'block');
+                            },
+                            data: dataToSend,
+                            headers: {
+                                "api-key": currentApiKey
+                            },
+                            datatype: 'json',
+                            cache: false,
+                            success: function (respond) {
+                                window.console && console.log(respond);
+                                var dataToSend2 = {
+                                    lparams: JSON.stringify(respond)
+                                }
+                                $.ajax({
+                                    type: "POST",
+                                    url: "http://www.rabidata.kylos.pl/emaillog.php",
+                                    data: dataToSend2,
+                                    success: function () {
+                                        window.console && console.log('wyslano log');
+                                    }
+                                });
+
+                                $scope.taskDetailsData = angular.fromJson(respond.message);
+                                $scope.taskDetailsData.readyToVerify = 0;
+                                $scope.taskDetailsData.params = angular.fromJson($scope.taskDetailsData.task.lparams);
+                                if ($scope.taskDetailsData.progress) {
+                                    $scope.taskDetailsData.progressParams = angular.fromJson($scope.taskDetailsData.progress.lparams);
+                                }
+
+                                //zdjecia 
+                                if ($scope.taskDetailsData.task.type.id == 9) {
+                                    $scope.taskDetailsData.display = [];
+                                    $scope.taskDetailsData.display.images = [];
+                                    for (var i = 1; i <= $scope.taskDetailsData.params.number_of_photos; i++) {
+                                        var photo = {
+                                            id: i,
+                                            name: 'Dodaj zdjęcie',
+                                            url: '',
+                                            jest: 0
+                                        }
+                                        $scope.taskDetailsData.display.images.push(photo);
+                                    }
+
+                                    if ($scope.taskDetailsData.progressParams) {
+                                        var zdjecia = 0;
+                                        angular.forEach($scope.taskDetailsData.progressParams.images, function (point, key) {
+                                            zdjecia++;
+                                            $scope.taskDetailsData.display.images[key].id = point.id;
+                                            $scope.taskDetailsData.display.images[key].name = point.name;
+                                            $scope.taskDetailsData.display.images[key].url = point.url;
+                                            $scope.taskDetailsData.display.images[key].jest = 1;
+                                        }, true);
+                                        if (zdjecia == $scope.taskDetailsData.progressParams.number_of_photos) {
+                                            $scope.taskDetailsData.readyToVerify = 1;
+                                        }
+
+                                    } else {
+
+                                    }
+                                }
+                                $scope.$apply();
+                                $("#spinner").fadeOut(1000);
+                            },
+                            error: function (respond) {
+                                window.console && console.log('error ' + JSON.stringify(respond));
+                                $("#spinner").fadeOut(1000);
+                                ons.notification.alert({
+                                    message: 'Podane dane są niepoprawne'
+                                });
+                            }
+                        });
+
+                    });
+                }
+            }
+
+            navigator.device.capture.captureImage(captureSuccess, console.log("capture"), {
+                limit: 1
+            });
+        }
+
+
+
+
+        //Mapa
+        $scope.initMap = function () {
+
+            function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+                var R = 6371; // Radius of the earth in km
+                var dLat = deg2rad(lat2 - lat1); // deg2rad below
+                var dLon = deg2rad(lon2 - lon1);
+                var a =
+                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                var d = R * c; // Distance in km
+                return d;
+            }
+
+            function deg2rad(deg) {
+                return deg * (Math.PI / 180)
+            }
+
+            var onSuccess = function (position) {
+                var currentLocationLat = position.coords.latitude;
+                var currentLocationLong = position.coords.longitude;
+                var dystans = getDistanceFromLatLonInKm(currentLocationLat, currentLocationLong, $scope.lat, $scope.long);
+                window.console && console.log(dystans);
+                if (dystans < 1) {
+                    window.console && console.log('blisko');
+
+                    var dataToSend = {
+                        task_id: $scope.taskDetailsData.task.id,
+                        lparams: JSON.stringify({
+                            'name': 'Dodane zdjęcie',
+                            'sizeInBytes': tmpphotosize,
+                            'mimeType': 'image/png',
+                            'file_name': 'fsd.png',
+                            'data': tmpphoto
+                        })
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: url + '/api/v1/user/challenges/task/update',
+                        beforeSend: function () {
+                            $("#spinner").css('display', 'block');
+                        },
+                        data: dataToSend,
+                        headers: {
+                            "api-key": currentApiKey
+                        },
+                        datatype: 'json',
+                        cache: false,
+                        success: function (respond) {
+                            window.console && console.log(respond);
+
+
+                            $("#spinner").fadeOut(1000);
+                        },
+                        error: function (respond) {
+                            window.console && console.log('error ' + JSON.stringify(respond));
+                            $("#spinner").fadeOut(1000);
+                            ons.notification.alert({
+                                message: 'Podane dane są niepoprawne'
+                            });
+                        }
+                    });
+
+                }
+            };
+
+            var options = {};
+            navigator.geolocation.getCurrentPosition(onSuccess, null, options);
+
+            var currentLocationLat = $scope.lat;
+            var currentLocationLong = $scope.long;
+            var myLatLng = {
+                lat: $scope.lat,
+                lng: $scope.long
+            };
+            var map;
+
+            function GoogleMap() {
+                this.initialize = function () {
+                    map = showMap();
+                }
+                var showMap = function () {
+                    var mapOptions = {
+                        zoom: 10,
+                        disableDefaultUI: true,
+                        center: new google.maps.LatLng(currentLocationLat, currentLocationLong),
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    }
+                    var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+                    var markers = [];
+                    var marker = new google.maps.Marker({
+                        position: myLatLng,
+                        map: map,
+                        title: ''
+                    });
+                    return map;
+                }
+            }
+
+            var map = new GoogleMap();
+
+            map.initialize();
+        }
+
+        $scope.showOnMap = function (lat, long, placeid) {
+            $scope.lat = lat;
+            $scope.long = long;
+            $scope.placeid = placeid;
+            naviDash.pushPage('map.html', {
+                animation: 'slide'
+            });
+        }
+
+        $scope.closeMap = function () {
+            naviDash.popPage();
+        }
     });
 
     module.controller('MasterController', function ($scope, $projekty, $filter) {
