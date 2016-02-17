@@ -76,6 +76,7 @@
     <gap:splash src="www/res/screen/ios/screen-ipad-portrait.png" gap:platform="ios" width="768" height="1024" />
     <gap:splash src="www/res/screen/ios/screen-ipad-landscape.png" gap:platform="ios" width="1024" height="768" />
     <gap:splash src="www/res/screen/windows-phone/screen-portrait.jpg" gap:platform="winphone" />
+    <gap:splash gap:platform="winphone" width="1152" height="1920" src="www/res/screen/ios/screen-iphone-portrait-568h-2x.png" />
 
 
     <!-- iOS 8 Override Config to support iPhone 6/6+ screen size -->
