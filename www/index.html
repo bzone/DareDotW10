@@ -161,7 +161,40 @@
             </ons-page>
         </ons-navigator>
     </ons-template>
+<ons-template id="stats.html">
+    <ons-page>
+    <ons-toolbar>
+        <div class="left">
+            <ons-toolbar-button ng-click="menu.toggleMenu()">
+                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+        <div class="center">{{lang.menu_text_statistics}}</div>
+        <div class="right">
 
+        </div>
+    </ons-toolbar>
+
+    <div class="contenHolder">
+        <div class="box13"><span class="white">{{user.finished_challenges}}</span>{{lang.home_text_challenges_done}}</div>
+        <div class="box13"><span class="white">{{user.created_challenges}}</span>{{lang.home_challanges_created}}
+           </div>
+        <div class="box13"><span class="white">{{user.total_badges}}</span>{{lang.home_badges1}}<br>{{lang.home_badges2}}</div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    <div class="contenHolder whiteFrame contentPaddings">
+        <div class="labelBlack marginB">{{lang.home_badges1}} {{lang.home_badges2}}</div>
+        <div class="clear"></div>
+        <div class="badge box13" ng-repeat="badge in user.last_badges" ng-click="badgeDetails(lang.badgesTableD[badge.id-1])">
+            <img src="img/badge{{badge.id}}a.png" ng-if="badge.earned" />
+            <img src="img/badged{{badge.id}}a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+        </div>
+    </div>
+    <div class="clear"></div>
+</ons-page>
+</ons-template>
     <ons-template id="menu.html">
         <ons-page modifier="menu-page">
             <ons-toolbar modifier="transparent">
@@ -486,7 +519,7 @@
             <div class="clear"></div>
         </ons-page>
     </ons-template>
-    <ons-template id="playerlist.html">
+    <ons-template id="playerslist.html">
         <ons-page>
             <ons-toolbar>
                 <div class="left">

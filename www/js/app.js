@@ -220,7 +220,7 @@ $scope.detectLang = l_lang;
             badge1_text: 'Finish your first challenge',
             badge2_text: 'Beat distance of 100km',
             badge3_text: 'Visit 10 places',
-            badge4_Text: 'Take 10 photos',
+            badge4_text: 'Take 10 photos',
             badge5_text: 'Play 10 challenges',
             badge6_text: 'Create a challenge',
             badge7_text: 'Win challenge playing with your team',
@@ -433,7 +433,7 @@ $scope.detectLang = l_lang;
             badge1_text: 'Beenden Sie Ihre erste Herausforderung',
             badge2_text: 'Schlagen Entfernung von 100 km',
             badge3_text: 'Besuchen Sie 10 Plätze',
-            badge4_Text: 'Nehmen Sie sich 10 Fotos',
+            badge4_text: 'Nehmen Sie sich 10 Fotos',
             badge5_text: 'Spielen Sie 10 Herausforderungen',
             badge6_text: 'Erstellen Sie eine Herausforderung',
             badge7_text: 'Win Herausforderung spielen mit Ihrem Team',
@@ -646,8 +646,8 @@ $scope.detectLang = l_lang;
             badge1_text: 'Ukończ swoje pierwsze wyzwanie',
             badge2_text: 'Pokonaj dystans 100km',
             badge3_text: 'Odwiedź 10 miejsc',
-            badge4_Text: 'Zrób 10 zdjęć',
-            badge5_text: 'Rzozegraj 10 wyzwań',
+            badge4_text: 'Zrób 10 zdjęć',
+            badge5_text: 'Rozegraj 10 wyzwań',
             badge6_text: 'Stwórz wyzwanie',
             badge7_text: 'Wygraj wyzwanie wraz ze swoją drużyną',
             badge8_text: 'Rozegraj wyzwanie z kategorii Kultura i Historia',
@@ -664,8 +664,43 @@ $scope.detectLang = l_lang;
         } else {
             $scope.lang = $scope.langen;
         }
+        
+        $scope.lang.badgesTable=[
+             $scope.lang.badge1name,
+            $scope.lang.badge2name,
+            $scope.lang.badge3name,
+            $scope.lang.badge4name,
+            $scope.lang.badge5name,
+            $scope.lang.badge6name,
+            $scope.lang.badge7name,
+            $scope.lang.badge8name,
+            $scope.lang.badge9name,
+            $scope.lang.badge10name,
+            $scope.lang.badge11name,
+            $scope.lang.badge12name
+        ]
 
-
+        $scope.lang.badgesTableD=[
+             $scope.lang.badge1_text,
+            $scope.lang.badge2_text,
+            $scope.lang.badge3_text,
+            $scope.lang.badge4_text,
+            $scope.lang.badge5_text,
+            $scope.lang.badge6_text,
+            $scope.lang.badge7_text,
+            $scope.lang.badge8_text,
+            $scope.lang.badge9_text,
+            $scope.lang.badge10_text,
+            $scope.lang.badge11_text,
+            $scope.lang.badge12_text
+        ]
+        
+        $scope.badgeDetails = function(text){
+            ons.notification.alert({
+                            message: text
+                        });
+        }
+        
         $scope.loguj = function (tekst) {
             window.console && console.log(tekst);
         }
