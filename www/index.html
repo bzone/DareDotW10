@@ -42,14 +42,14 @@
         <ons-page style="background-color:#E60E2A !Important;" class="loginBg">
             <form class="loginStyle">
                 <div class="bigLogo"></div>
-                <input type="email" id="loginEmail" class="loginInputStyle" placeholder="e-mail" />
-                <input type="password" id="loginPassword" class="loginInputStyle" placeholder="hasło" />
-                <a class="submitButton" ng-click="loginUser()">zaloguj się</a>
+                <input type="email" id="loginEmail" class="loginInputStyle" placeholder="{{lang.password_text_email_hint}}" />
+                <input type="password" id="loginPassword" class="loginInputStyle" placeholder="{{lang.login_text_password}}" />
+                <a class="submitButton" ng-click="loginUser()">{{lang.login_text_login}}</a>
                 <br/>
-                <span class="lub">lub</span>
-                <a class="submitButton alternative" onclick="navi.pushPage('register.html', { animation : 'slide' } )">utwórz nowe konto</a>
+                <span class="lub">{{lang.login_text_or}}</span>
+                <a class="submitButton alternative" onclick="navi.pushPage('register.html', { animation : 'slide' } )">{{lang.login_text_create_account}}</a>
                 <br/>
-                <a class="passwordReset" onclick="navi.pushPage('recovery.html', { animation : 'slide' } )">zapomniałeś hasła?</a>
+                <a class="passwordReset" onclick="navi.pushPage('recovery.html', { animation : 'slide' } )">{{lang.login_text_forgotten_password}}</a>
             </form>
         </ons-page>
     </ons-navigator>
@@ -67,10 +67,10 @@
             </ons-toolbar>
             <form class="loginStyle">
                 <div class="bigLogo logoMargin"></div>
-                <input type="text" id="newUserName" class="loginInputStyle" placeholder="nazwa użytkownika" />
-                <input type="email" id="newUserEmail" class="loginInputStyle" placeholder="e-mail" />
-                <input type="password" id="newUserPassword" class="loginInputStyle" placeholder="hasło" />
-                <a class="submitButton" ng-click="registerUser()">Utwórz konto i zaloguj</a>
+                <input type="text" id="newUserName" class="loginInputStyle" placeholder="{{lang.login_text_name}}" />
+                <input type="email" id="newUserEmail" class="loginInputStyle" placeholder="{{lang.password_text_email_hint}}" />
+                <input type="password" id="newUserPassword" class="loginInputStyle" placeholder="{{lang.login_text_password}}" />
+                <a class="submitButton" ng-click="registerUser()">{{lang.login_text_create_account}}</a>
                 <br/>
             </form>
         </ons-page>
@@ -89,12 +89,11 @@
             <form class="loginStyle">
                 <div class="bigLogo logoMargin"></div>
 
-                <p class="recover">Podaj nazwę uzytkownika i adres e-mail powiązany z Twoim kontem.
-                    <br/>Na podany adres otrzymasz przypomnienia swojego hasła.</p>
+                <p class="recover">{{lang.password_text_description}}</p>
                 <br/>
-                <input type="text" id="recoverUser" class="loginInputStyle" placeholder="twoja nazwa użytkownika" />
-                <input type="email" id="recoverEmail" class="loginInputStyle" placeholder="twój e-mail" />
-                <a class="submitButton" ng-click="recoverPassword()">zresetuj hasło</a>
+                <input type="text" id="recoverUser" class="loginInputStyle" placeholder="{{lang.login_text_name}}" />
+                <input type="email" id="recoverEmail" class="loginInputStyle" placeholder="{{lang.password_text_email_hint}}" />
+                <a class="submitButton" ng-click="recoverPassword()">{{lang.password_text_reset_password}}</a>
                 <br/>
             </form>
         </ons-page>
@@ -128,17 +127,14 @@
                     <div class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{user.image_url}}');"></div>
                     <div class="userName">{{user.username}}</div>
                     <div class="userEmail">{{user.email}}</div>
-                    <div class="box13"><span class="white">{{user.finished_challenges}}</span>ukończone
-                        <br/>wyzwania</div>
-                    <div class="box13"><span class="white">{{user.finished_challenges}}</span>utworzone
-                        <br/>wyzwania</div>
-                    <div class="box13"><span class="white">{{user.total_badges}}</span>zdobyte
-                        <br/>odznaki</div>
+                    <div class="box13"><span class="white">{{user.finished_challenges}}</span>{{lang.home_text_challenges_done}}</div>
+                    <div class="box13"><span class="white">{{user.finished_challenges}}</span>{{lang.home_challanges_created}}</div>
+                    <div class="box13"><span class="white">{{user.total_badges}}</span>{{lang.home_badges1}}<br>{{lang.home_badges2}}</div>
                     <div class="clear"></div>
                     <div class="lastChallenge" ng-click="questDetails(user.last_challenge.id)">
                         <div class="top">
                             <div class="arrow"></div>
-                            <div class="labelBlack">Ostatnie wyzwanie</div>
+                            <div class="labelBlack">{{lang.home_text_last_challenge}}</div>
                             <div class="clear"></div>
                             <span class="title">{{user.last_challenge.name}}</span>
                         </div>
@@ -160,7 +156,7 @@
                             <div class="clear"></div>
                         </div>
                     </div>
-                    <a class="submitButton alternative" ng-click="openYourQuests()">wszystkie aktywne wyzwania</a>
+                    <a class="submitButton alternative" ng-click="openYourQuests()">{{lang.home_text_show_all_challanges}}</a>
                 </div>
             </ons-page>
         </ons-navigator>
@@ -177,26 +173,26 @@
             </ons-toolbar>
             <ons-list class="bottom-menu-list">
                 <ons-list-item class="bottom-menu-item" ng-click="openHome()">
-                    <div class="menuIcon home"></div> Ekran główny
+                    <div class="menuIcon home"></div> {{lang.menu_text_home}}
                 </ons-list-item>
 
                 <ons-list-item class="bottom-menu-item" ng-click="openYourQuests()">
-                    <div class="menuIcon yourQuests"></div> Twoje wyzwania
+                    <div class="menuIcon yourQuests"></div> {{lang.menu_text_challenges}}
                 </ons-list-item>
 
                 <ons-list-item class="bottom-menu-item" ng-click="openNewQuests()">
-                    <div class="menuIcon newQuest"></div> Nowe wyzwanie
+                    <div class="menuIcon newQuest"></div> {{lang.menu_text_new_challenge}}
                 </ons-list-item>
 
                 <ons-list-item class="bottom-menu-item" ng-click="openStats()">
-                    <div class="menuIcon stats"></div> Statystyki
+                    <div class="menuIcon stats"></div> {{lang.menu_text_statistics}}
                 </ons-list-item>
 
                 <ons-list-item class="bottom-menu-item" ng-click="openSettings()">
-                    <div class="menuIcon settings"></div> Ustawienia
+                    <div class="menuIcon settings"></div> {{lang.menu_text_settings}}
                 </ons-list-item>
             </ons-list>
-            <a class="submitButton logOut" ng-click="logOut()">Wyloguj</a>
+            <a class="submitButton logOut" ng-click="logOut()">{{lang.button_text_logout}}</a>
         </ons-page>
     </ons-template>
 
@@ -208,7 +204,7 @@
                         <ons-icon icon="ion-chevron-left" fixed-width="false" style="font-size: 26px; vertical-align: -4px"></ons-icon>
                     </ons-toolbar-button>
                 </div>
-                <div class="center">Lokalizacja</div>
+                <div class="center">{{lang.localization}}</div>
                 <div class="right">
                 </div>
             </ons-toolbar>
@@ -238,17 +234,14 @@
                 <div class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{user.image_url}}');"></div>
                 <div class="userName">{{user.username}}</div>
                 <div class="userEmail">{{user.email}}</div>
-                <div class="box13"><span class="white">{{user.finished_challenges}}</span>ukończone
-                    <br/>wyzwania</div>
-                <div class="box13"><span class="white">{{user.finished_challenges}}</span>utworzone
-                    <br/>wyzwania</div>
-                <div class="box13"><span class="white">{{user.total_badges}}</span>zdobyte
-                    <br/>odznaki</div>
+                <div class="box13"><span class="white">{{user.finished_challenges}}</span>{{lang.home_text_challenges_done}}</div>
+                <div class="box13"><span class="white">{{user.finished_challenges}}</span>{{lang.home_challanges_created}}</div>
+                <div class="box13"><span class="white">{{user.total_badges}}</span>{{lang.home_badges1}}<br>{{lang.home_badges2}}</div>
                 <div class="clear"></div>
                 <div class="lastChallenge" ng-click="questDetails(user.last_challenge.id)">
                     <div class="top">
                         <div class="arrow"></div>
-                        <div class="labelBlack">Ostatnie wyzwanie</div>
+                        <div class="labelBlack">{{lang.home_text_last_challenge}}</div>
                         <div class="clear"></div>
                         <span class="title">{{user.last_challenge.name}}</span>
                     </div>
@@ -270,7 +263,7 @@
                         <div class="clear"></div>
                     </div>
                 </div>
-                <a class="submitButton alternative" ng-click="openYourQuests()">wszystkie aktywne wyzwania</a>
+                <a class="submitButton alternative" ng-click="openYourQuests()">{{lang.home_text_show_all_challanges}}</a>
             </div>
         </ons-page>
     </ons-template>
@@ -288,14 +281,14 @@
             </ons-toolbar>
             <div class="emptyState" ng-if="tasksInCategory.length==0">
                 <div class="emptyCircle"></div>
-                <p>Brak zadań w tej kategori</p>
+                <p>{{lang.no_games_in_category}}</p>
             </div>
             <div class="contenHolder whiteFrame noContentPaddings" id="activeTasks">
                 <div class="task" ng-repeat="task in tasksInCategory" ng-click="questDetails(task.id)">
                     <div class="top">
                         <div class="arrow"></div>
                         <div class="clear"></div>
-                        <span class="title">{{task.name}}</span><span class="red">koniec: {{task.finish_date | date:'dd.MM.yyyy HH:mm'}}</span>
+                        <span class="title">{{task.name}}</span><span class="red">{{lang.challenge_full_text_end_date}} {{task.finish_date | date:'dd.MM.yyyy HH:mm'}}</span>
                     </div>
                     <div class="bottom">
                         <div class="box13 borderRight">
@@ -307,8 +300,7 @@
                             <div class="boxText">0{{task.stats.number_of_users}}</div>
                         </div>
                         <div class="box13">
-                            <div class="boxText" ng-if="task.multiplayer==1">Gra
-                                <br/>drużynowa</div>
+                            <div class="boxText" ng-if="task.multiplayer==1">{{lang.challenge_fragment_text_multiplayer}}</div>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -402,24 +394,24 @@
                         {{questDetailsData.teams_stats.white}}
                     </div>
                     <div class="clear"></div>
-                    biali
+                    {{lang.whites}}
                 </div>
                 <div class="box12">
                     <div class="circleHolder black">
                         {{questDetailsData.teams_stats.black}}
                     </div>
                     <div class="clear"></div>
-                    czarni
+                    {{lang.blacks}}
                 </div>
                 <div class="clear"></div>
             </div>
             <!-- NOTE: Pokaż listę graczy - moduł -->
             <div class="contenHolder" ng-if="userIn() && questDetailsData.multiplayer==1">
-                <a class="submitButton" ng-click="playersList(questDetailsData.id)">pokaż listę graczy</a>
+                <a class="submitButton" ng-click="playersList(questDetailsData.id)">{{lang.show_players_list}}</a>
             </div>
             <!-- NOTE: Pokaż ranking - moduł -->
             <div class="contenHolder" ng-if="userIn() && questDetailsData.multiplayer==0">
-                <a class="submitButton" ng-click="playersRanking(questDetailsData.id)">pokaż ranking graczy</a>
+                <a class="submitButton" ng-click="playersRanking(questDetailsData.id)">{{lang.challenge_set_text_show_ranking}}</a>
             </div>
             <!-- NOTE: Pokaż liste zadan multiplayer/przydzielone/aktywne -->
             <div class="contenHolder whiteFrame noContentPaddings" ng-if="userIn() && questDetailsData.multiplayer==1 && questActive()">
@@ -485,11 +477,11 @@
                 </div>
             </div>
             <div class="contenHolder  noContentPaddings" ng-if="!userIn() && questDetailsData.multiplayer==0 && questActive()">
-                <a class="submitButton" ng-click="joinQuest(questDetailsData.id,'none')">dołącz do zestawu zadań</a>
+                <a class="submitButton" ng-click="joinQuest(questDetailsData.id,'none')">{{lang.challenge_join_text_join}}</a>
             </div>
             <div class="contenHolder  noContentPaddings" ng-if="!userIn() && questDetailsData.multiplayer==1 && questActive()">
-                <a class="submitButton white" ng-click="joinQuest(questDetailsData.id,'white')">dołącz do białej drużyny</a>
-                <a class="submitButton" ng-click="joinQuest(questDetailsData.id,'black')">dołącz do czarnej drużyny</a>
+                <a class="submitButton white" ng-click="joinQuest(questDetailsData.id,'white')">{{lang.challenge_join_text_join_white_team}}</a>
+                <a class="submitButton" ng-click="joinQuest(questDetailsData.id,'black')">{{lang.challenge_join_text_join_black_team}}</a>
             </div>
             <div class="clear"></div>
         </ons-page>
@@ -502,7 +494,7 @@
                         <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
                     </ons-toolbar-button>
                 </div>
-                <div class="center">lista graczy</div>
+                <div class="center">{{lang.players_list}}</div>
             </ons-toolbar>
             <div class="contenHolder whiteFrame noContentPaddings">
                 <div class="task" ng-repeat="userLoop in questDetailsData.users">
@@ -533,7 +525,7 @@
                         <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
                     </ons-toolbar-button>
                 </div>
-                <div class="center">porównanie graczy</div>
+                <div class="center">{{lang.compare_players}}</div>
                 <div class="right">
                 </div>
             </ons-toolbar>
@@ -582,7 +574,7 @@
                         <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
                     </ons-toolbar-button>
                 </div>
-                <div class="center">lista graczy</div>
+                <div class="center">{{lang.players_list}}</div>
             </ons-toolbar>
             <div class="contenHolder whiteFrame noContentPaddings">
                 <div class="task" ng-repeat="userLoop in questDetailsData.users">
@@ -617,7 +609,7 @@
                         <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
                     </ons-toolbar-button>
                 </div>
-                <div class="center">notyfikacje</div>
+                <div class="center">{{lang.notifications}}</div>
             </ons-toolbar>
             <div class="contenHolder whiteFrame noContentPaddings">
                 <div class="task" ng-repeat="element in notifications">
@@ -627,7 +619,7 @@
                             <div class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{element.sender.image_url}}');" ng-if="element.sender.image_url!='null'"></div>
                             <div class="avatar" style="background-image:url('img/noavatar.png');" ng-if="element.sender.image_url=='null'"></div>
                         </div>
-                        <span class="username" style="font-size:16px;">Zaproszenie do zestawu:<br/>{{element.object.name}}</span>
+                        <span class="username" style="font-size:16px;">{{lang.game_invitation}}<br/>{{element.object.name}}</span>
                         <span class="red">{{element.sender.first_name}} {{element.sender.last_name}}</span>
                     </div>
                 </div>
@@ -642,7 +634,7 @@
                         <ons-icon icon="ion-ios-arrow-back" size="28px" fixed-width="false"></ons-icon>
                     </ons-toolbar-button>
                 </div>
-                <div class="center">zadanie</div>
+                <div class="center">{{lang.task_task}}</div>
                 <div class="right">
                 </div>
             </ons-toolbar>
@@ -671,7 +663,7 @@
             <!-- NOTE: Typ zadania zdjecia -->
             <div class="contenHolder whiteFrame noContentPaddings" ng-if="taskDetailsData.task.type.id==9">
                 <div class="top" style="margin-bottom:5px;">
-                    <div class="labelBlack">Wykonaj {{taskDetailsData.display.images.length}} zdjęć:</div>
+                    <div class="labelBlack">{{lang.task_text_beat_the_distance}} {{taskDetailsData.display.images.length}} zdjęć:</div>
                 </div>
                 <div class="clear"></div>
                 <div class="task" ng-repeat="photo in taskDetailsData.display.images track by $index">
@@ -691,7 +683,7 @@
             <!-- NOTE: Typ zadania miejsca -->
             <div class="contenHolder whiteFrame noContentPaddings" ng-if="taskDetailsData.task.type.id==10">
                 <div class="top" style="margin-bottom:5px;">
-                    <div class="labelBlack">Odwiedź {{taskDetailsData.display.places.length}} miejsce:</div>
+                    <div class="labelBlack">{{lang.task_text_visit}} {{taskDetailsData.display.places.length}} miejsce:</div>
                 </div>
                 <div class="clear"></div>
                 <div class="task" ng-repeat="place in taskDetailsData.display.places track by $index">
@@ -707,7 +699,7 @@
             <!-- NOTE: Typ zadania checklista -->
             <div class="contenHolder whiteFrame noContentPaddings" ng-if="taskDetailsData.task.type.id==8">
                 <div class="top" style="margin-bottom:5px;">
-                    <div class="labelBlack">Wykonaj {{taskDetailsData.params.checklist.length}} zadań:</div>
+                    <div class="labelBlack">{{lang.task_text_complete}} {{taskDetailsData.params.checklist.length}} {{lang.tasks_text_tasks}}</div>
                 </div>
                 <div class="task" ng-repeat="task in taskDetailsData.display track by $index" ng-click="toogleCheck($index)">
                     <div class="multiplayerTask checklist textLeft">
@@ -719,14 +711,14 @@
             </div>
 
             <div class="contenHolder  noContentPaddings">
-                <a class="submitButton inactive" ng-click="taskVerify(taskDetailsData.task.id,taskDetailsData.task.type.id)" ng-if="taskDetailsData.readyToVerify==1">prześlij do weryfikacji</a>
-                <a class="submitButton inactive" style="opacity:0.5;" ng-if="taskDetailsData.readyToVerify==0">prześlij do weryfikacji</a>
+                <a class="submitButton inactive" ng-click="taskVerify(taskDetailsData.task.id,taskDetailsData.task.type.id)" ng-if="taskDetailsData.readyToVerify==1">{{lang.task_text_verify}}</a>
+                <a class="submitButton inactive" style="opacity:0.5;" ng-if="taskDetailsData.readyToVerify==0">{{lang.task_text_verify}}</a>
             </div>
             <div class="contenHolder  noContentPaddings textCenter" ng-if="taskDetailsData.progress.waiting_for_verification==1 && taskDetailsData.progress.verified==0">
-                oczekuje na weryfikację
+                {{lang.task_text_awiting_verification}}
             </div>
             <div class="contenHolder  noContentPaddings textCenter" ng-if="taskDetailsData.progress.verified==1">
-                zadanie zweryfikowane
+                {{lang.task_activity_text_task_completed_and_verified}}
             </div>
             <div class="clear"></div>
         </ons-page>
@@ -739,7 +731,7 @@
                         <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
                     </ons-toolbar-button>
                 </div>
-                <div class="center">Nowe wyzwanie</div>
+                <div class="center">{{lang.menu_text_new_challenge}}</div>
                 <div class="right">
 
                 </div>
@@ -747,7 +739,7 @@
             <div class="contenHolder">
                 <div class="bigLogo" style="height:80px;"></div>
                 <center>
-                    <p>Wybierz interesującą Cię kategorie wyzwań</p>
+                    <p>{{lang.select_category}}</p>
                 </center>
             </div>
             <div class="clear"></div>
@@ -756,31 +748,31 @@
                     <li class="list__item" ng-click="getCategory(4,'Impreza')">
                         <ons-row align="center" class="row ons-row-inner row-center">
                             <div class="arrow"></div>
-                            <ons-col class="col ons-col-inner">Impreza</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.party}}</ons-col>
                         </ons-row>
                     </li>
                     <li class="list__item" ng-click="getCategory(2,'Kultura i historia')">
                         <ons-row align="center" class="row ons-row-inner row-center">
                             <div class="arrow"></div>
-                            <ons-col class="col ons-col-inner">Kultura i historia</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.culture_and_history}}</ons-col>
                         </ons-row>
                     </li>
                     <li class="list__item" ng-click="getCategory(3,'Rozrywka')">
                         <ons-row align="center" class="row ons-row-inner row-center">
                             <div class="arrow"></div>
-                            <ons-col class="col ons-col-inner">Rozrywka</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.entertainment}}</ons-col>
                         </ons-row>
                     </li>
                     <li class="list__item" ng-click="getCategory(5,'Sport')">
                         <ons-row align="center" class="row ons-row-inner row-center">
                             <div class="arrow"></div>
-                            <ons-col class="col ons-col-inner">Sport</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.sport}}</ons-col>
                         </ons-row>
                     </li>
                     <li class="list__item" ng-click="getCategory(1,'Turystyka')">
                         <ons-row align="center" class="row ons-row-inner row-center">
                             <div class="arrow"></div>
-                            <ons-col class="col ons-col-inner">Turystyka</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.touristics}}</ons-col>
                         </ons-row>
                     </li>
                 </ul>
@@ -796,7 +788,7 @@
                         <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
                     </ons-toolbar-button>
                 </div>
-                <div class="center" ng-init="loguj('test')">Ustawienia</div>
+                <div class="center" ng-init="loguj('test')">{{lang.menu_text_settings}}</div>
                 <div class="right">
 
                 </div>
@@ -805,56 +797,56 @@
             <div class="contenHolder">
                 <div id="avatarPreview" class="avatar" style="background-image:url('http://daredot.dev.thickmug.com{{user.image_url}}');"></div>
 
-                <a class="submitButton " ng-click="changeAvatar()">Zmień awatar</a>
+                <a class="submitButton " ng-click="changeAvatar()">{{lang.settings_text_set_avatar}}</a>
             </div>
             <div class="clear"></div>
             <div class="contenHolder whiteFrame">
                 <ul class="list">
                     <li class="list__item">
                         <ons-row align="center" class="row ons-row-inner row-center">
-                            <ons-col class="col ons-col-inner">Nazwa użytkownika</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.login_text_name}}</ons-col>
                             <ons-col class="col ons-col-inner">
-                                <input type="text" class="text-input text-input--transparent inputWithLabel" placeholder="Nazwa użytkownika" ng-model="user.username" ng-init="user.username">
+                                <input type="text" class="text-input text-input--transparent inputWithLabel" placeholder="{{lang.settings_text_username}}" ng-model="user.username" ng-init="user.username">
                             </ons-col>
                         </ons-row>
                     </li>
                     <li class="list__item">
                         <ons-row align="center" class="row ons-row-inner row-center">
-                            <ons-col class="col ons-col-inner">Imię</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.name}}</ons-col>
                             <ons-col class="col ons-col-inner">
-                                <input type="text" class="text-input text-input--transparent inputWithLabel" placeholder="Imię" ng-model="user.first_name" ng-init="user.first_name">
+                                <input type="text" class="text-input text-input--transparent inputWithLabel" placeholder="{{lang.name}}" ng-model="user.first_name" ng-init="user.first_name">
                             </ons-col>
                         </ons-row>
                     </li>
                     <li class="list__item">
                         <ons-row align="center" class="row ons-row-inner row-center">
-                            <ons-col class="col ons-col-inner">Nazwisko</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.last_name}}</ons-col>
                             <ons-col class="col ons-col-inner">
-                                <input type="text" class="text-input text-input--transparent inputWithLabel" placeholder="Nazwisko" ng-model="user.last_name" ng-init="user.last_name">
+                                <input type="text" class="text-input text-input--transparent inputWithLabel" placeholder="{{lang.last_name}}" ng-model="user.last_name" ng-init="user.last_name">
                             </ons-col>
                         </ons-row>
                     </li>
                     <li class="list__item">
                         <ons-row align="center" class="row ons-row-inner row-center">
-                            <ons-col class="col ons-col-inner">E-mail</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.create_account_text_email}}</ons-col>
                             <ons-col class="col ons-col-inner">
-                                <input type="text" class="text-input text-input--transparent inputWithLabel" placeholder="E-mail" ng-model="user.email" ng-init="user.email">
+                                <input type="text" class="text-input text-input--transparent inputWithLabel" placeholder="{{lang.create_account_text_email}}" ng-model="user.email" ng-init="user.email">
                             </ons-col>
                         </ons-row>
                     </li>
                     <li class="list__item">
                         <ons-row align="center" class="row ons-row-inner row-center">
-                            <ons-col class="col ons-col-inner">Nowe hasło</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.settings_text_new_password}}</ons-col>
                             <ons-col class="col ons-col-inner">
-                                <input type="password" class="text-input text-input--transparent inputWithLabel" placeholder="Nowe hasło" ng-model="user.newpassword">
+                                <input type="password" class="text-input text-input--transparent inputWithLabel" placeholder="{{lang.settings_text_new_password}}" ng-model="user.newpassword">
                             </ons-col>
                         </ons-row>
                     </li>
                     <li class="list__item">
                         <ons-row align="center" class="row ons-row-inner row-center">
-                            <ons-col class="col ons-col-inner">Powtórz hasło</ons-col>
+                            <ons-col class="col ons-col-inner">{{lang.settings_text_confirm_new_password}}</ons-col>
                             <ons-col class="col ons-col-inner">
-                                <input type="password" class="text-input text-input--transparent inputWithLabel" placeholder="Powtórz hasło" ng-model="user.newpasswordr">
+                                <input type="password" class="text-input text-input--transparent inputWithLabel" placeholder="{{lang.settings_text_confirm_new_password}}" ng-model="user.newpasswordr">
                             </ons-col>
                         </ons-row>
                     </li>
@@ -878,7 +870,7 @@
             </div>
             <div class="clear"></div>
             <div class="contenHolder">
-                <a class="submitButton alternative" ng-click="saveSettings()">Zapisz ustawienia</a>
+                <a class="submitButton alternative" ng-click="saveSettings()">{{lang.settings_text_save_settings}}</a>
             </div>
         </ons-page>
     </ons-template>
@@ -891,7 +883,7 @@
                         <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
                     </ons-toolbar-button>
                 </div>
-                <div class="center">Twoje wyzwania</div>
+                <div class="center">{{lang.menu_text_challenges}}</div>
                 <div class="right">
                 </div>
             </ons-toolbar>
@@ -900,12 +892,12 @@
                     <div class="button-bar" style="width:90%;margin:7px 5%; ">
                         <div class="button-bar__item" ng-click="showActiveTasks()">
                             <input type="radio" name="navi-segment-a" checked>
-                            <div class="button-bar__button">Aktywne</div>
+                            <div class="button-bar__button">{{lang.active_tasks}}</div>
                         </div>
 
                         <div class="button-bar__item" ng-click="showDoneTasks()">
                             <input type="radio" name="navi-segment-a">
-                            <div class="button-bar__button">Ukończone</div>
+                            <div class="button-bar__button">{{lang.ended_tasks}}</div>
                         </div>
                     </div>
                 </div>
@@ -915,7 +907,7 @@
                     <div class="top">
                         <div class="arrow"></div>
                         <div class="clear"></div>
-                        <span class="title">{{task.name}}</span><span class="red">koniec: {{task.finish_date | date:'dd.MM.yyyy HH:mm'}}</span>
+                        <span class="title">{{task.name}}</span><span class="red">{{lang.challenge_full_text_end_date}} {{task.finish_date | date:'dd.MM.yyyy HH:mm'}}</span>
                     </div>
                     <div class="bottom">
                         <div class="box13 borderRight">
@@ -942,7 +934,7 @@
                     <div class="top">
                         <div class="arrow"></div>
                         <div class="clear"></div>
-                        <span class="title">{{task.name}}</span><span class="red">koniec: {{task.finish_date | date:'dd.MM.yyyy HH:mm'}}</span>
+                        <span class="title">{{task.name}}</span><span class="red">{{lang.challenge_full_text_end_date}} {{task.finish_date | date:'dd.MM.yyyy HH:mm'}}</span>
                     </div>
                     <div class="bottom">
                         <div class="box13 borderRight">

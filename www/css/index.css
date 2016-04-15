@@ -1043,3 +1043,9 @@ span.location {
     background-size: 28px 31px;
     z-index: 90;
 }
+
+input#fileU {
+    width: 0px;
+    overflow: hidden;
+}
+
