@@ -4,19 +4,20 @@
     var url = "http://daredot.dev.thickmug.com";
     var currentApiKey;
     var timeinterval = 0;
+    var timeinterval2 = 0;
 
 
-     var l_lang;
-        if (navigator.userLanguage) // Explorer
-            l_lang = navigator.userLanguage;
-        else if (navigator.language) // FF
-            l_lang = navigator.language;
-        else
-            l_lang = "en";
-    
+    var l_lang;
+    if (navigator.userLanguage) // Explorer
+        l_lang = navigator.userLanguage;
+    else if (navigator.language) // FF
+        l_lang = navigator.language;
+    else
+        l_lang = "en";
+
     module.controller('AppController', function ($scope, $projekty, $filter) {
         $scope.currentPage = "Home";
-$scope.detectLang = l_lang;
+        $scope.detectLang = l_lang;
 
         $scope.langen = {
             active_tasks: 'Active',
@@ -228,7 +229,8 @@ $scope.detectLang = l_lang;
             badge9_text: 'Play a challenge of tourism category',
             badge10_text: 'Play a challenge of entertainment category',
             badge11_text: 'Play a challenge of party category',
-            badge12_text: 'Play a challenge of sport category'
+            badge12_text: 'Play a challenge of sport category',
+            end_at: 'Time to end'
         }
 
         $scope.langde = {
@@ -441,7 +443,8 @@ $scope.detectLang = l_lang;
             badge9_text: 'Spielen Sie eine Herausforderung der Kategorie Tourismus',
             badge10_text: 'Spielen Sie eine Herausforderung der Unterhaltung Kategorie',
             badge11_text: 'Spielen Sie eine Herausforderung der Partei Kategorie',
-            badge12_text: 'Spielen Sie eine Herausforderung der Kategorie Sport'
+            badge12_text: 'Spielen Sie eine Herausforderung der Kategorie Sport',
+            end_at: 'bis zum Ende'
         }
 
         $scope.langpl = {
@@ -654,7 +657,8 @@ $scope.detectLang = l_lang;
             badge9_text: 'Rozegraj wyzwanie z kategorii Turystyka',
             badge10_text: 'Rozegraj wyzwanie z kategorii Rozrywka',
             badge11_text: 'Rozegraj wyzwanie z kategorii Impreza',
-            badge12_text: 'Rozegraj wyzwanie z kategorii Sport'
+            badge12_text: 'Rozegraj wyzwanie z kategorii Sport',
+            end_at: 'Do końca'
         }
 
         if ($scope.detectLang == 'pl' || $scope.detectLang == 'pl-PL' || $scope.detectLang == 'pl-pl') {
@@ -664,8 +668,8 @@ $scope.detectLang = l_lang;
         } else {
             $scope.lang = $scope.langen;
         }
-        
-        $scope.lang.badgesTable=[
+
+        $scope.lang.badgesTable = [
              $scope.lang.badge1name,
             $scope.lang.badge2name,
             $scope.lang.badge3name,
@@ -680,7 +684,7 @@ $scope.detectLang = l_lang;
             $scope.lang.badge12name
         ]
 
-        $scope.lang.badgesTableD=[
+        $scope.lang.badgesTableD = [
              $scope.lang.badge1_text,
             $scope.lang.badge2_text,
             $scope.lang.badge3_text,
@@ -694,13 +698,13 @@ $scope.detectLang = l_lang;
             $scope.lang.badge11_text,
             $scope.lang.badge12_text
         ]
-        
-        $scope.badgeDetails = function(text){
+
+        $scope.badgeDetails = function (text) {
             ons.notification.alert({
-                            message: text
-                        });
+                message: text
+            });
         }
-        
+
         $scope.loguj = function (tekst) {
             window.console && console.log(tekst);
         }
@@ -1261,6 +1265,43 @@ $scope.detectLang = l_lang;
                         naviDash.pushPage('questdetails.html');
                         $("#spinner").fadeOut(1000);
 
+                        $scope.questDetailsData.timetoend = "0d 00:00:00";
+                        timeinterval2 = setInterval(function () {
+                            var nowis = new Date();
+                            var endis = new Date($scope.questDetailsData.finish_date);
+                            var difference = (endis.getTime() - nowis.getTime()) / 1000;
+                            if (nowis.getTime() >= endis.getTime()) {
+                                $scope.questDetailsData.timetoend = "0d 00:00:00";
+                            } else {
+                                difference = parseInt(difference);
+                                var days_te = difference % 86400;
+                                days_te = (difference - days_te) / 86400;
+                                difference = difference % 86400;
+                                var h_te = difference % 3600;
+                                h_te = (difference - h_te) / 3600;
+                                difference = difference % 3600;
+                                if (h_te < 10) {
+                                    h_te = "0" + h_te;
+                                }
+                                var m_te = difference % 60;
+                                m_te = (difference - m_te) / 60;
+                                if (m_te < 10) {
+                                    m_te = "0" + m_te;
+                                }
+                                difference = difference % 60;
+                                var s_te = difference;
+                                if (s_te < 10) {
+                                    s_te = "0" + s_te;
+                                }
+
+                                $scope.questDetailsData.timetoend = days_te + 'd ' + h_te + ':' + m_te + ':' + s_te;
+                            }
+                            $scope.$apply();
+
+
+                        }, 1000);
+
+
                     } else if (respond.status == "error") {
                         window.console && console.log('error ' + respond.data);
                         $("#spinner").fadeOut(1000);
@@ -1494,6 +1535,26 @@ $scope.detectLang = l_lang;
 
 
                             if ($scope.taskDetailsData.progressParams) {
+                                //$scope.taskDetailsData.progressParams.points[i].visited
+                                var miejsca = 0;
+                                var it=0;
+
+                                angular.forEach($scope.taskDetailsData.progressParams, function (point, key) {
+                                  
+                                    
+                                    $scope.taskDetailsData.display.places[it].visited = point.visited;
+                                   
+                                    if($scope.taskDetailsData.display.places[it].visited==1){
+                                          miejsca++;
+                                    }
+                                     it++;
+
+                                }, true);
+
+                                if (miejsca == $scope.taskDetailsData.display.places.length) {
+                                    $scope.taskDetailsData.readyToVerify = 1;
+                                }
+
 
                             } else {
 
@@ -1930,6 +1991,8 @@ $scope.detectLang = l_lang;
                         }
                     }
                 }, 5000);
+
+
             }
 
             if ($scope.taskDetailsData.display.button == "start") {
@@ -2178,10 +2241,10 @@ $scope.detectLang = l_lang;
                         task_id: $scope.taskDetailsData.task.id,
                         lparams: JSON.stringify({
                             points: {
-                                lat: 51.743050816712,
-                                lng: 19.452592805028,
-                                name: "Lidl",
-                                desc: "Zrob zakupy tutaj po odwiedzeniu",
+                                lat: $scope.lat,
+                                lng: $scope.long,
+                                name: $scope.name,
+                                desc: $scope.desc,
                                 visited: 1
                             }
                         })
@@ -2255,10 +2318,11 @@ $scope.detectLang = l_lang;
             map.initialize();
         }
 
-        $scope.showOnMap = function (lat, long, placeid) {
+        $scope.showOnMap = function (lat, long, name, desc) {
             $scope.lat = lat;
             $scope.long = long;
-            $scope.placeid = placeid;
+            $scope.placename = name;
+            $scope.placedesc = desc;
             naviDash.pushPage('map.html', {
                 animation: 'slide'
             });

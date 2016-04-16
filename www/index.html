@@ -476,6 +476,7 @@
                 </div>
                 <div class="clear"></div>
             </div>
+           
             <!-- NOTE: Pokaż wyniki drużyn - moduł -->
             <div class="contenHolder versus" ng-if="userIn() && questDetailsData.multiplayer==1">
                 <div class="vs">vs</div>
@@ -494,6 +495,12 @@
                     {{lang.blacks}}
                 </div>
                 <div class="clear"></div>
+            </div>
+             <!-- NOTE: czas do listy gier - moduł -->
+            <div class="contenHolder">
+               <div class="timeHolder">
+                {{lang.end_at}}: {{questDetailsData.timetoend}}
+                </div>
             </div>
             <!-- NOTE: Pokaż listę graczy - moduł -->
             <div class="contenHolder" ng-if="userIn() && questDetailsData.multiplayer==1">
@@ -781,7 +788,7 @@
                         <div class="whiteTeamPoints" ng-if="place.visited==0"></div>
                         <div class="whiteTeamPoints active" ng-if="place.visited!=0"></div>
                         <span class="title">{{place.name}}</span>
-                        <div class="map" ng-click="showOnMap(place.lat,place.lng)"></div>
+                        <div class="map" ng-click="showOnMap(place.lat,place.lng,place.name, place.message)"></div>
                     </div>
                 </div>
 

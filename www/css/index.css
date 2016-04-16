@@ -1052,3 +1052,12 @@ input#fileU {
 .badge.box13 {
     height: 130px;
 }
+
+.timeHolder {
+    width: 100%;
+    text-align: center;
+    color: #FFF;
+    border: solid 2px #FFF;
+    border-radius: 30px;
+    line-height: 42px;
+}
