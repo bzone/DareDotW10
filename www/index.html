@@ -187,9 +187,14 @@
         <div class="labelBlack marginB">{{lang.home_badges1}} {{lang.home_badges2}}</div>
         <div class="clear"></div>
         <div class="badge box13" ng-repeat="badge in user.last_badges" ng-click="badgeDetails(lang.badgesTableD[badge.id-1])">
-            <img src="img/badge{{badge.id}}a.png" ng-if="badge.earned" />
-            <img src="img/badged{{badge.id}}a.png" ng-if="!badge.earned" />
+            <img ng-src="img/badge{{badge.id}}a.png" ng-if="badge.earned" />
+            <img ng-src="img/badged{{badge.id}}a.png" ng-if="!badge.earned" />
             <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            <div ng-if="badge.id==11">
+                <img src="img/badge11a.png" ng-if="badge.earned" />
+            <img src="img/badged11a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
         </div>
     </div>
     <div class="clear"></div>
