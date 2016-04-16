@@ -187,12 +187,64 @@
         <div class="labelBlack marginB">{{lang.home_badges1}} {{lang.home_badges2}}</div>
         <div class="clear"></div>
         <div class="badge box13" ng-repeat="badge in user.last_badges" ng-click="badgeDetails(lang.badgesTableD[badge.id-1])">
-            <img ng-src="img/badge{{badge.id}}a.png" ng-if="badge.earned" />
-            <img ng-src="img/badged{{badge.id}}a.png" ng-if="!badge.earned" />
+           <div ng-if="badge.id==1">
+                <img src="img/badge1a.png" ng-if="badge.earned" />
+            <img src="img/badged1a.png" ng-if="!badge.earned" />
             <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
+            <div ng-if="badge.id==2">
+                <img src="img/badge2a.png" ng-if="badge.earned" />
+            <img src="img/badged2a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
+            <div ng-if="badge.id==3">
+                <img src="img/badge3a.png" ng-if="badge.earned" />
+            <img src="img/badged3a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
+            <div ng-if="badge.id==4">
+                <img src="img/badge4a.png" ng-if="badge.earned" />
+            <img src="img/badged4a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
+            <div ng-if="badge.id==5">
+                <img src="img/badge5a.png" ng-if="badge.earned" />
+            <img src="img/badged5a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
+            <div ng-if="badge.id==6">
+                <img src="img/badge6a.png" ng-if="badge.earned" />
+            <img src="img/badged6a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
+            <div ng-if="badge.id==7">
+                <img src="img/badge7a.png" ng-if="badge.earned" />
+            <img src="img/badged7a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
+            <div ng-if="badge.id==8">
+                <img src="img/badge8a.png" ng-if="badge.earned" />
+            <img src="img/badged8a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
+            <div ng-if="badge.id==9">
+                <img src="img/badge9a.png" ng-if="badge.earned" />
+            <img src="img/badged9a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
+            <div ng-if="badge.id==10">
+                <img src="img/badge10a.png" ng-if="badge.earned" />
+            <img src="img/badged10a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
             <div ng-if="badge.id==11">
                 <img src="img/badge11a.png" ng-if="badge.earned" />
             <img src="img/badged11a.png" ng-if="!badge.earned" />
+            <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
+            </div>
+            <div ng-if="badge.id==12">
+                <img src="img/badge12a.png" ng-if="badge.earned" />
+            <img src="img/badged12a.png" ng-if="!badge.earned" />
             <div class="clear"></div> {{lang.badgesTable[badge.id-1]}}
             </div>
         </div>
